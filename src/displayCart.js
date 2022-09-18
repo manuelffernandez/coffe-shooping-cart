@@ -1,7 +1,9 @@
+
+//Referencias a los elementos del DOM
 let shop = document.getElementById('shop');
 let cartList = document.getElementById('cartList');
-console.log(shop);
 
+//Arrays de ejemplo
 let store = [
 	{
 		name: 'Café',
@@ -52,6 +54,8 @@ let cart = [
 	}
 ];
 
+
+//Genera las cards de todos los productos del array 'sotre' por medio del método map
 function generateShop() {
 	shop.innerHTML = store.map(function(product) {
 		return `
@@ -72,6 +76,9 @@ function generateShop() {
 	}).join("");
 }
 
+
+//Genera las cards de los elementos del array 'cart' iterando a traves de sus elementos con un forOf
+//Para insertarlo en el DOM, se crea un elemento div y se utiliza el metodo 'appendChild()' en la referencia cartList
 function generateCart() {
 	for(let product of cart) {
 		let row = document.createElement('div');
@@ -98,5 +105,7 @@ function generateCart() {
 	}
 }
 
+
+//Invoco funciones
 generateShop();
 generateCart();
