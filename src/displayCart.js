@@ -6,6 +6,8 @@
 
 //Ocultar el elemento html que contiene el titulo del carrito si cart está vacio
 
+//Suavizar animacion de la aparacion de elementos en el cart
+
 //Agregar :hover a los botones
 
 
