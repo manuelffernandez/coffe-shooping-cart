@@ -4,8 +4,6 @@
 
 //El boton de restar cantidad en el carrito debe detenerse una vez llegue a cero y no eliminar el elemento del cart
 
-//Ocultar el elemento html que contiene el titulo del carrito si cart está vacio
-
 //Suavizar animacion de la aparacion de elementos en el cart
 
 //Agregar :hover a los botones
