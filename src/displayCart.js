@@ -109,7 +109,8 @@ class Storage extends Array {
 
 //Referencias a los elementos del DOM
 let shop = document.getElementById('shop');
-let cartList = document.getElementById('cartList');
+// let cartList = document.getElementById('cartList');
+let cartContainer = document.getElementById('cartContainer');
 
 let genericDescription = '1 Lorem ipsum dolor sit amet, consectetur adipisicing.';
 
@@ -147,7 +148,7 @@ function modulo(number) {
 function generateShop() {
 	shop.innerHTML = store.map(function(product) {
 		return `
-		<div class="col-12 col-sm-6 col-lg-3">
+		<div id="store-card-${product.id}" class="col-12 col-sm-6 col-lg-3">
 			<div class="card">
 				<img class="card-img-top img-fluid" src="${product.img}">
 				<div class="card-body karla">
@@ -169,6 +170,15 @@ function generateShop() {
 //Genera las cards de los elementos del array 'cart' iterando a traves de sus elementos con un forOf
 //Para insertarlo en el DOM, se crea un elemento div y se utiliza el metodo 'appendChild()' en la referencia cartList
 function generateCart() {
+	let totalRow = document.createElement('div');
+	let cartTotal = cart.calcTotal();
+
+	cartContainer.innerHTML = `<div class="container mt-2 d-flex justify-content-center">
+									<h2 class="display-5 text-dark text-uppercase paytoneone">Tu carrito</h2>
+								</div>
+								<div id="cartList" class="container-fluid">
+								</div>`;
+
 	for(let product of cart) {
 		let row = document.createElement('div');
 		row.className = 'container row mx-auto mb-3 py-2 border';
@@ -192,20 +202,26 @@ function generateCart() {
 						</div>`;
 		cartList.appendChild(row);
 	}
-	let totalRow = document.createElement('div');
+
+	totalRow.id = 'total-cart-row';
 	totalRow.className = 'container row mx-auto mb-3 py-2 border-top align-items-center justify-content-between';
 	totalRow.innerHTML = `<p class="col-1 h3 paytoneone">Total</p>
-						<p class="col-1 display-6 karla">$${cart.calcTotal()}</p>`;
+						<p class="col-1 display-6 karla">$${cartTotal}</p>`;
 
 	cartList.appendChild(totalRow);
+	
 }
 
 
 
 function refreshCartList() {
-	cartList.innerHTML = '';
+	cartContainer.innerHTML = '';
 	cart.cleanStorage();
-	generateCart();
+	
+	if(cart.calcTotal() !== 0) {
+		generateCart();
+	} else return
+	
 }
 
 
