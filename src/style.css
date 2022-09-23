@@ -9,6 +9,7 @@
 :root {
   --color-white: #f2f2da;
   --color-green: #63c979;
+  --color-grey: #d5d5d5;
 }
 
 .paytoneone {
@@ -58,14 +59,32 @@
 	background-image: url(./assets/img/bg_img/coffe_beans.jpg);
 }
 
-.button__cart {
+.deleteButton {
+	border-style: none;
+}
+
+/* important to override BS styles */
+.deleteButton:hover {
+	background-color: red !important;
+	color: white !important;
+}
+
+.enabled__addButton {
 	border-style: none;
 	background-color: var(--color-green);
 	color: var(--color-white);
 }
 
-.button__delete {
+.enabled__addButton:hover {
 	border-style: none;
+	background-color: var(--color-white);
+	color: var(--color-green);
+}
+
+.disabled__addButton {
+	border-style: none;
+	background-color: var(--color-white);
+	color: var(--color-grey);
 }
 
 .cartList__img {

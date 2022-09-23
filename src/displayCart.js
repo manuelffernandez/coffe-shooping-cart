@@ -1,12 +1,15 @@
-// ==================== TAREA ====================
-//Deshabilitar el boton de agregar una vez que el producto ya este en el carrito
-//Idea: Usar funcion distinta a "addOrRemoveFromCart()" en el evento onclick del boton Agregar
 
+// ==================== TAREA ====================
 //El boton de restar cantidad en el carrito debe detenerse una vez llegue a cero y no eliminar el elemento del cart
 
-//Suavizar animacion de la aparacion de elementos en el cart
+//Chequear y cambiar nombres de funciones polémicas:
+//moveProductStockFromThisTo()
+//cleanStorage()
+//checkAddButtons()
 
-//Agregar :hover a los botones
+//Ver si no hay una manera mas simple de escribir el codigo de checkAddButtons()
+
+//Suavizar animacion de la aparacion de elementos en el cart
 
 
 
@@ -107,7 +110,6 @@ class Storage extends Array {
 
 //Referencias a los elementos del DOM
 let shop = document.getElementById('shop');
-// let cartList = document.getElementById('cartList');
 let cartContainer = document.getElementById('cartContainer');
 
 let genericDescription = '1 Lorem ipsum dolor sit amet, consectetur adipisicing.';
@@ -132,16 +134,6 @@ let cart = new Storage();
 
 // ==================== FUNCIONES ====================
 
-//Devuelve el valor absoluto de un numero
-function modulo(number) {
-	if(number >= 0) {
-		return number;
-	} else {
-		return -number;
-	}
-}
-
-
 //Genera las cards de todos los productos del array 'sotre' por medio del método map
 function generateShop() {
 	shop.innerHTML = store.map(function(product) {
@@ -154,8 +146,9 @@ function generateShop() {
 					<p class="card-text font__300">${product.desc}</p>
 					<div class="d-flex justify-content-between">
 						<p class="h5 fw-semibold m-0 karla">$${product.price}</p>
-						<button onclick="addOrRemoveFromCart(${product.id}, true)" class="h5 p-2 text-uppercase button__cart paytoneone">Agregar</button>
+						<button id="add-btn-${product.id}" onclick="addOrRemoveFromCart(${product.id}, true)" class="h5 p-2 text-uppercase enabled__addButton paytoneone">Agregar</button>
 					</div>
+					<p class="card-text"><small class="text-muted">Stock disponible: ${product.stock} unidades</small></p>
 				</div>
 			</div>
 		</div>
@@ -196,7 +189,7 @@ function generateCart() {
 							<p class="ms-2 mb-3 h4 karla font__400">$${product.calcSubtotal()}</p>
 						</div>
 						<div class="col-lg-1 m-auto d-flex justify-content-center">
-							<button onclick="eraseProductFromCart(${product.id})" class="p-3 border border-danger text-danger text-uppercase karla bg-transparent">Eliminar</button>
+							<button onclick="eraseProductFromCart(${product.id})" class="p-3 border border-danger text-danger text-uppercase deleteButton karla bg-transparent">Eliminar</button>
 						</div>`;
 		cartList.appendChild(row);
 	}
@@ -211,8 +204,30 @@ function generateCart() {
 }
 
 
+//Recorre el array cart en busca de los productos existentes. En base a ello los habilita o deshabilita los botones de agregar productos, aplicando los correspondientes estilos.
+function checkAddButtons() {
+	cart.forEach(product => {
+		let button = document.querySelector(`#add-btn-${product.id}`);
 
-function refreshCartList() {
+		if(cart.findProduct(product.id).stock !== 0) {		
+			button.classList.remove('enabled__addButton');
+			button.classList.add('disabled__addButton');
+			button.disabled = true;
+		} else {
+			button.classList.remove('disabled__addButton');
+			button.classList.add('enabled__addButton');
+			button.disabled = false;
+		}
+	});
+}
+
+
+
+//Actualiza los elementos del DOM en base a los datos de los objetos 'Storage'
+function refreshIndexDOM() {
+	shop.innerHTML = '';
+	generateShop();
+
 	cartContainer.innerHTML = '';
 	cart.cleanStorage();
 	
@@ -220,31 +235,35 @@ function refreshCartList() {
 		generateCart();
 	} else return
 	
+	checkAddButtons();
 }
 
 
 
+//Agrega o remueve una unidad del producto especificado por id del carrito
+//El booleano 'operator' define si se agrega o remueve
 function addOrRemoveFromCart(IdProduct, operator) {
 	let operation = operator ? 1 : -1;
 
 	store.moveProductStockFromThisTo(IdProduct, operation, cart);
-	refreshCartList();
+	refreshIndexDOM();
 }
 
 
 
+//Vacia todas las unidades de un producto especificado por id del carrito
 function eraseProductFromCart(IdProduct) {
 	let amount = cart.findProduct(IdProduct).stock;
 	cart.moveProductStockFromThisTo(IdProduct, amount, store);
 	cart.cleanStorage();
-	refreshCartList();
+	refreshIndexDOM();
 }
 
 
 
 function init() {
-	generateShop();
-	refreshCartList();
+	// generateShop();
+	refreshIndexDOM();
 }
 
 init();
