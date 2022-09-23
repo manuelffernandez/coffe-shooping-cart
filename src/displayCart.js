@@ -262,7 +262,6 @@ function eraseProductFromCart(IdProduct) {
 
 
 function init() {
-	// generateShop();
 	refreshIndexDOM();
 }
 
