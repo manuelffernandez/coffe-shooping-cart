@@ -1,14 +1,15 @@
-// ==================== TAREA ====================
-//Deshabilitar el boton de agregar una vez que el producto ya este en el carrito
-//Idea: Usar funcion distinta a "addOrRemoveFromCart()" en el evento onclick del boton Agregar
 
+// ==================== TAREA ====================
 //El boton de restar cantidad en el carrito debe detenerse una vez llegue a cero y no eliminar el elemento del cart
 
-//Ocultar el elemento html que contiene el titulo del carrito si cart está vacio
+//Chequear y cambiar nombres de funciones polémicas:
+//moveProductStockFromThisTo()
+//cleanStorage()
+//checkAddButtons()
+
+//Ver si no hay una manera mas simple de escribir el codigo de checkAddButtons()
 
 //Suavizar animacion de la aparacion de elementos en el cart
-
-//Agregar :hover a los botones
 
 
 
@@ -109,15 +110,15 @@ class Storage extends Array {
 
 //Referencias a los elementos del DOM
 let shop = document.getElementById('shop');
-let cartList = document.getElementById('cartList');
+let cartContainer = document.getElementById('cartContainer');
 
 let genericDescription = '1 Lorem ipsum dolor sit amet, consectetur adipisicing.';
 
 let store = new Storage(
-	new Item('Café', '1', 15, 10, genericDescription, '../src/assets/img/cards_img/coffee.jpg'),
-	new Item('Jugo', '2', 20, 10, genericDescription, '../src/assets/img/cards_img/juice.jpg'),
-	new Item('Medialuna', '3', 20, 10, genericDescription, '../src/assets/img/cards_img/medialuna.jpg'),
-	new Item('Sandwich', '4', 30, 10, genericDescription, '../src/assets/img/cards_img/sandwich.jpg')
+	new Item('Café', '1', 15, 10, genericDescription, './src/assets/img/cards_img/coffee.jpg'),
+	new Item('Jugo', '2', 20, 10, genericDescription, './src/assets/img/cards_img/juice.jpg'),
+	new Item('Medialuna', '3', 20, 10, genericDescription, './src/assets/img/cards_img/medialuna.jpg'),
+	new Item('Sandwich', '4', 30, 10, genericDescription, './src/assets/img/cards_img/sandwich.jpg')
 );
 
 let cart = new Storage();
@@ -133,21 +134,11 @@ let cart = new Storage();
 
 // ==================== FUNCIONES ====================
 
-//Devuelve el valor absoluto de un numero
-function modulo(number) {
-	if(number >= 0) {
-		return number;
-	} else {
-		return -number;
-	}
-}
-
-
 //Genera las cards de todos los productos del array 'sotre' por medio del método map
 function generateShop() {
 	shop.innerHTML = store.map(function(product) {
 		return `
-		<div class="col-12 col-sm-6 col-lg-3">
+		<div id="store-card-${product.id}" class="col-12 col-sm-6 col-lg-3">
 			<div class="card">
 				<img class="card-img-top img-fluid" src="${product.img}">
 				<div class="card-body karla">
@@ -155,8 +146,9 @@ function generateShop() {
 					<p class="card-text font__300">${product.desc}</p>
 					<div class="d-flex justify-content-between">
 						<p class="h5 fw-semibold m-0 karla">$${product.price}</p>
-						<button onclick="addOrRemoveFromCart(${product.id}, true)" class="h5 p-2 text-uppercase button__cart paytoneone">Agregar</button>
+						<button id="add-btn-${product.id}" onclick="addOrRemoveFromCart(${product.id}, true)" class="h5 p-2 text-uppercase enabled__addButton paytoneone">Agregar</button>
 					</div>
+					<p class="card-text"><small class="text-muted">Stock disponible: ${product.stock} unidades</small></p>
 				</div>
 			</div>
 		</div>
@@ -169,6 +161,15 @@ function generateShop() {
 //Genera las cards de los elementos del array 'cart' iterando a traves de sus elementos con un forOf
 //Para insertarlo en el DOM, se crea un elemento div y se utiliza el metodo 'appendChild()' en la referencia cartList
 function generateCart() {
+	let totalRow = document.createElement('div');
+	let cartTotal = cart.calcTotal();
+
+	cartContainer.innerHTML = `<div class="container mt-2 d-flex justify-content-center">
+									<h2 class="display-5 text-dark text-uppercase paytoneone">Tu carrito</h2>
+								</div>
+								<div id="cartList" class="container-fluid">
+								</div>`;
+
 	for(let product of cart) {
 		let row = document.createElement('div');
 		row.className = 'container row mx-auto mb-3 py-2 border';
@@ -188,49 +189,80 @@ function generateCart() {
 							<p class="ms-2 mb-3 h4 karla font__400">$${product.calcSubtotal()}</p>
 						</div>
 						<div class="col-lg-1 m-auto d-flex justify-content-center">
-							<button onclick="eraseProductFromCart(${product.id})" class="p-3 border border-danger text-danger text-uppercase karla bg-transparent">Eliminar</button>
+							<button onclick="eraseProductFromCart(${product.id})" class="p-3 border border-danger text-danger text-uppercase deleteButton karla bg-transparent">Eliminar</button>
 						</div>`;
 		cartList.appendChild(row);
 	}
-	let totalRow = document.createElement('div');
+
+	totalRow.id = 'total-cart-row';
 	totalRow.className = 'container row mx-auto mb-3 py-2 border-top align-items-center justify-content-between';
 	totalRow.innerHTML = `<p class="col-1 h3 paytoneone">Total</p>
-						<p class="col-1 display-6 karla">$${cart.calcTotal()}</p>`;
+						<p class="col-1 display-6 karla">$${cartTotal}</p>`;
 
 	cartList.appendChild(totalRow);
+	
+}
+
+
+//Recorre el array cart en busca de los productos existentes. En base a ello los habilita o deshabilita los botones de agregar productos, aplicando los correspondientes estilos.
+function checkAddButtons() {
+	cart.forEach(product => {
+		let button = document.querySelector(`#add-btn-${product.id}`);
+
+		if(cart.findProduct(product.id).stock !== 0) {		
+			button.classList.remove('enabled__addButton');
+			button.classList.add('disabled__addButton');
+			button.disabled = true;
+		} else {
+			button.classList.remove('disabled__addButton');
+			button.classList.add('enabled__addButton');
+			button.disabled = false;
+		}
+	});
 }
 
 
 
-function refreshCartList() {
-	cartList.innerHTML = '';
+//Actualiza los elementos del DOM en base a los datos de los objetos 'Storage'
+function refreshIndexDOM() {
+	shop.innerHTML = '';
+	generateShop();
+
+	cartContainer.innerHTML = '';
 	cart.cleanStorage();
-	generateCart();
+	
+	if(cart.calcTotal() !== 0) {
+		generateCart();
+	} else return
+	
+	checkAddButtons();
 }
 
 
 
+//Agrega o remueve una unidad del producto especificado por id del carrito
+//El booleano 'operator' define si se agrega o remueve
 function addOrRemoveFromCart(IdProduct, operator) {
 	let operation = operator ? 1 : -1;
 
 	store.moveProductStockFromThisTo(IdProduct, operation, cart);
-	refreshCartList();
+	refreshIndexDOM();
 }
 
 
 
+//Vacia todas las unidades de un producto especificado por id del carrito
 function eraseProductFromCart(IdProduct) {
 	let amount = cart.findProduct(IdProduct).stock;
 	cart.moveProductStockFromThisTo(IdProduct, amount, store);
 	cart.cleanStorage();
-	refreshCartList();
+	refreshIndexDOM();
 }
 
 
 
 function init() {
-	generateShop();
-	refreshCartList();
+	refreshIndexDOM();
 }
 
 init();
