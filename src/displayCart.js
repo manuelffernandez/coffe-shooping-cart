@@ -115,10 +115,10 @@ let cartContainer = document.getElementById('cartContainer');
 let genericDescription = '1 Lorem ipsum dolor sit amet, consectetur adipisicing.';
 
 let store = new Storage(
-	new Item('Café', '1', 15, 10, genericDescription, '../src/assets/img/cards_img/coffee.jpg'),
-	new Item('Jugo', '2', 20, 10, genericDescription, '../src/assets/img/cards_img/juice.jpg'),
-	new Item('Medialuna', '3', 20, 10, genericDescription, '../src/assets/img/cards_img/medialuna.jpg'),
-	new Item('Sandwich', '4', 30, 10, genericDescription, '../src/assets/img/cards_img/sandwich.jpg')
+	new Item('Café', '1', 15, 10, genericDescription, './src/assets/img/cards_img/coffee.jpg'),
+	new Item('Jugo', '2', 20, 10, genericDescription, './src/assets/img/cards_img/juice.jpg'),
+	new Item('Medialuna', '3', 20, 10, genericDescription, './src/assets/img/cards_img/medialuna.jpg'),
+	new Item('Sandwich', '4', 30, 10, genericDescription, './src/assets/img/cards_img/sandwich.jpg')
 );
 
 let cart = new Storage();
