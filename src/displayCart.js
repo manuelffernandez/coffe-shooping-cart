@@ -287,7 +287,7 @@ function checkAndUpdate() {
 
 
 function init() {
-	checkLocalStorage();
+	checkAndUpdate();
 	refreshIndexDOM();
 }
 
