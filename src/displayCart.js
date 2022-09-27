@@ -7,7 +7,8 @@
 //cleanStorage()
 //checkAddButtons()
 
-//Ver si no hay una manera mas simple de escribir el codigo de checkAddButtons()
+//Dividir la funcionalidad de checkAddButton en: chequear stock en cart, manipular el dom.
+
 
 //Suavizar animacion de la aparacion de elementos en el cart
 
@@ -81,7 +82,6 @@ class Storage extends Array {
 
 	cleanStorage() {
 		this.forEach(product => {
-
 			if(product.stock === 0) {
 				let index = this.indexOf(product);
 				this.splice(index, 1);
@@ -131,7 +131,6 @@ let cart = new Storage();
 
 
 
-
 // ==================== FUNCIONES ====================
 
 //Genera las cards de todos los productos del array 'sotre' por medio del método map
@@ -161,46 +160,49 @@ function generateShop() {
 //Genera las cards de los elementos del array 'cart' iterando a traves de sus elementos con un forOf
 //Para insertarlo en el DOM, se crea un elemento div y se utiliza el metodo 'appendChild()' en la referencia cartList
 function generateCart() {
-	let totalRow = document.createElement('div');
-	let cartTotal = cart.calcTotal();
+	cart.cleanStorage();
 
-	cartContainer.innerHTML = `<div class="container mt-2 d-flex justify-content-center">
-									<h2 class="display-5 text-dark text-uppercase paytoneone">Tu carrito</h2>
+	if(cart.calcTotal()) {
+		let totalRow = document.createElement('div');
+		let cartTotal = cart.calcTotal();
+
+		cartContainer.innerHTML = `<div class="container mt-2 d-flex justify-content-center">
+										<h2 class="display-5 text-dark text-uppercase paytoneone">Tu carrito</h2>
+									</div>
+									<div id="cartList" class="container-fluid">
+									</div>`;
+
+		for(let product of cart) {
+			let row = document.createElement('div');
+			row.className = 'container row mx-auto mb-3 py-2 border';
+			row.innerHTML = `<div class="d-flex col-6 offset-3 flex-column align-items-center col-lg-4 offset-lg-0 flex-lg-row justify-content-lg-start">
+								<img src="${product.img}" class="img-fluid w-auto">
+								<div class="d-flex flex-row flex-lg-column">
+									<p class="ms-2 mb-0 h4 paytoneone">${product.name}</p>
+									<p class="ms-2 mb-0 h4 karla font__400">$${product.price}</p>
 								</div>
-								<div id="cartList" class="container-fluid">
-								</div>`;
-
-	for(let product of cart) {
-		let row = document.createElement('div');
-		row.className = 'container row mx-auto mb-3 py-2 border';
-		row.innerHTML = `<div class="d-flex col-6 offset-3 flex-column align-items-center col-lg-4 offset-lg-0 flex-lg-row justify-content-lg-start">
-							<img src="${product.img}" class="img-fluid w-auto">
-							<div class="d-flex flex-row flex-lg-column">
-								<p class="ms-2 mb-0 h4 paytoneone">${product.name}</p>
-								<p class="ms-2 mb-0 h4 karla font__400">$${product.price}</p>
 							</div>
-						</div>
-						<div class="col-4 offset-4 col-lg-1 my-3 p-2 offset-lg-3 my-lg-auto d-flex justify-content-evenly align-items-center border border-dark">
-								<button onclick="addOrRemoveFromCart(${product.id}, false)" class="m-0 h4 bg-transparent border-0 karla font__400">-</button>
-								<p class="m-0 h4 karla font__400">${product.stock}</p>
-								<button onclick="addOrRemoveFromCart(${product.id}, true)" class="m-0 h4 bg-transparent border-0 karla font__300">+</button>					
-						</div>
-						<div class="col-lg-2 m-auto d-flex justify-content-center justify-content-lg-start">
-							<p class="ms-2 mb-3 h4 karla font__400">$${product.calcSubtotal()}</p>
-						</div>
-						<div class="col-lg-1 m-auto d-flex justify-content-center">
-							<button onclick="eraseProductFromCart(${product.id})" class="p-3 border border-danger text-danger text-uppercase deleteButton karla bg-transparent">Eliminar</button>
-						</div>`;
-		cartList.appendChild(row);
-	}
+							<div class="col-4 offset-4 col-lg-1 my-3 p-2 offset-lg-3 my-lg-auto d-flex justify-content-evenly align-items-center border border-dark">
+									<button onclick="addOrRemoveFromCart(${product.id}, false)" class="m-0 h4 bg-transparent border-0 karla font__400">-</button>
+									<p class="m-0 h4 karla font__400">${product.stock}</p>
+									<button onclick="addOrRemoveFromCart(${product.id}, true)" class="m-0 h4 bg-transparent border-0 karla font__300">+</button>					
+							</div>
+							<div class="col-lg-2 m-auto d-flex justify-content-center justify-content-lg-start">
+								<p class="ms-2 mb-3 h4 karla font__400">$${product.calcSubtotal()}</p>
+							</div>
+							<div class="col-lg-1 m-auto d-flex justify-content-center">
+								<button onclick="eraseProductFromCart(${product.id})" class="p-3 border border-danger text-danger text-uppercase deleteButton karla bg-transparent">Eliminar</button>
+							</div>`;
+			cartList.appendChild(row);
+		}
 
-	totalRow.id = 'total-cart-row';
-	totalRow.className = 'container row mx-auto mb-3 py-2 border-top align-items-center justify-content-between';
-	totalRow.innerHTML = `<p class="col-1 h3 paytoneone">Total</p>
-						<p class="col-1 display-6 karla">$${cartTotal}</p>`;
+		totalRow.id = 'total-cart-row';
+		totalRow.className = 'container row mx-auto mb-3 py-2 border-top align-items-center justify-content-between';
+		totalRow.innerHTML = `<p class="col-1 h3 paytoneone">Total</p>
+							<p class="col-1 display-6 karla">$${cartTotal}</p>`;
 
-	cartList.appendChild(totalRow);
-	
+		cartList.appendChild(totalRow);
+	} else return
 }
 
 
@@ -229,13 +231,21 @@ function refreshIndexDOM() {
 	generateShop();
 
 	cartContainer.innerHTML = '';
-	cart.cleanStorage();
-	
-	if(cart.calcTotal() !== 0) {
-		generateCart();
-	} else return
+	generateCart();
 	
 	checkAddButtons();
+}
+
+
+
+function updateLocalStorage(cart) {
+	localStorage.setItem('user_cart', JSON.stringify(cart));
+}
+
+
+
+function getLocalStorage() {
+	return JSON.parse(localStorage.getItem('user_cart'));
 }
 
 
@@ -246,6 +256,8 @@ function addOrRemoveFromCart(IdProduct, operator) {
 	let operation = operator ? 1 : -1;
 
 	store.moveProductStockFromThisTo(IdProduct, operation, cart);
+
+	updateLocalStorage(cart);
 	refreshIndexDOM();
 }
 
@@ -256,12 +268,26 @@ function eraseProductFromCart(IdProduct) {
 	let amount = cart.findProduct(IdProduct).stock;
 	cart.moveProductStockFromThisTo(IdProduct, amount, store);
 	cart.cleanStorage();
+	updateLocalStorage(cart);
 	refreshIndexDOM();
 }
 
 
 
+function checkAndUpdate() {
+	const cartLS = getLocalStorage();
+
+	if(cartLS) {
+		cartLS.map(element => {
+			store.moveProductStockFromThisTo(element.id, element.stock, cart);
+		});
+	}
+}
+
+
+
 function init() {
+	checkAndUpdate();
 	refreshIndexDOM();
 }
 
