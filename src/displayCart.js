@@ -21,18 +21,6 @@
 
 
 
-// ==================== IMPORTS ====================
-import {updateLocalStorage, getLocalStorage} from './services/localStorage.js';
-
-
-
-
-
-
-
-
-
-
 // ==================== CLASS ====================
 
 //CUANDO MODULARIZE EL CODIGO ACA VAN LOS IMPORTS DE LAS CLASSES
@@ -246,6 +234,18 @@ function refreshIndexDOM() {
 	generateCart();
 	
 	checkAddButtons();
+}
+
+
+
+function updateLocalStorage(cart) {
+	localStorage.setItem('user_cart', JSON.stringify(cart));
+}
+
+
+
+function getLocalStorage() {
+	return JSON.parse(localStorage.getItem('user_cart'));
 }
 
 
