@@ -1,6 +1,5 @@
 
 // ==================== TAREA ====================
-//El boton de restar cantidad en el carrito debe detenerse una vez llegue a cero y no eliminar el elemento del cart
 
 //Chequear y cambiar nombres de funciones polémicas:
 //moveProductStockFromThisTo()
@@ -176,7 +175,7 @@ function generateCart() {
 									</div>`;
 
 		for(let product of cart) {
-			const {name, id, price, stock, desc, img} = product;
+			const {name, id, price, stock, img} = product;
 			let row = document.createElement('div');
 
 			row.className = 'container row mx-auto mb-3 py-2 border';
@@ -214,7 +213,7 @@ function generateCart() {
 //Recorre el array cart en busca de los productos existentes. En base a ello los habilita o deshabilita los botones de agregar productos, aplicando los correspondientes estilos.
 function disableOrEnableAddBtn() {
 	cart.forEach(product => {
-		const {name, id, price, stock, desc, img} = product;
+		const {id, stock} = product;
 		let button = document.querySelector(`#add-btn-${id}`);
 
 		if(stock) {		
@@ -260,6 +259,14 @@ function getLocalStorage() {
 //El booleano 'operator' define si se agrega o remueve
 function addOrRemoveFromCart(IdProduct, operator) {
 	let operation = operator ? 1 : -1;
+	let product = cart.findProduct(IdProduct);
+	
+	if(product){
+		if(-product.stock === operation){
+			console.log('No puede tener menos de una unidad');
+			return
+		}
+	}	
 
 	store.moveProductStockFromThisTo(IdProduct, operation, cart);
 	updateLocalStorage(cart);
