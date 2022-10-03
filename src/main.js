@@ -73,7 +73,7 @@ class Storage extends Array {
 				return
 			}
 
-			storageToUpdate.findProduct(product.id).stock += amount;	
+			storageToUpdate.findProduct(product.id).stock += amount;
 			console.log('el valor fue actualizado');
 			return
 		}
@@ -216,7 +216,7 @@ function disableOrEnableAddBtn() {
 		const {id, stock} = product;
 		let button = document.querySelector(`#add-btn-${id}`);
 
-		if(stock) {		
+		if(stock) {
 			button.classList.remove('enabled__addButton');
 			button.classList.add('disabled__addButton');
 			button.disabled = true;
@@ -260,13 +260,13 @@ function getLocalStorage() {
 function addOrRemoveFromCart(IdProduct, operator) {
 	let operation = operator ? 1 : -1;
 	let product = cart.findProduct(IdProduct);
-	
+
 	if(product){
 		if(-product.stock === operation){
 			console.log('No puede tener menos de una unidad');
 			return
 		}
-	}	
+	}
 
 	store.moveProductStockFromThisTo(IdProduct, operation, cart);
 	updateLocalStorage(cart);
