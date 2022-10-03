@@ -10,9 +10,6 @@
 //Suavizar animacion de la aparacion de elementos en el cart
 
 
-//DUMMY COMMENT 1
-//DUMMY COMMENT 2
-//DUMMY COMMENT 3
 
 
 
