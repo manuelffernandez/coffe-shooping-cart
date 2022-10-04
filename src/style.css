@@ -61,6 +61,7 @@
 
 .deleteButton {
 	border-style: none;
+	transition: all 0.3s;
 }
 
 /* important to override BS styles */
@@ -73,6 +74,7 @@
 	border-style: none;
 	background-color: var(--color-green);
 	color: var(--color-white);
+	transition: all 0.3s;
 }
 
 .enabled__addButton:hover {
