@@ -9,6 +9,8 @@
 
 // TODO: modularizar código
 
+// TODO: instalar librerias por npm
+
 // TODO: Dividir la funcionalidad de checkAddButton en: chequear stock en cart, manipular el dom.
 
 // TODO: Suavizar animacion de la aparacion de elementos en el cart
