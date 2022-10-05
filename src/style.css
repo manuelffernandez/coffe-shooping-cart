@@ -17,7 +17,7 @@
 }
 
 .karla {
-	font-family: 'Karla', sans-serif;	
+	font-family: 'Karla', sans-serif;
 }
 
 .font__400 {
@@ -33,7 +33,7 @@
 }
 
 .font__green {
-	color: var(--color-green);	
+	color: var(--color-green);
 }
 
 .logo {
@@ -61,6 +61,7 @@
 
 .deleteButton {
 	border-style: none;
+	transition: all 0.3s;
 }
 
 /* important to override BS styles */
@@ -73,6 +74,7 @@
 	border-style: none;
 	background-color: var(--color-green);
 	color: var(--color-white);
+	transition: all 0.3s;
 }
 
 .enabled__addButton:hover {

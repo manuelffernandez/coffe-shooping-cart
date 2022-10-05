@@ -1,13 +1,19 @@
 
 // ==================== TAREA ====================
 
-//Chequear y cambiar nombres de funciones polémicas:
-//moveProductStockFromThisTo()
-//cleanStorage()
+// TODO: poner button de carrito en el navbar que invoque confirmPurchase()
 
-//Dividir la funcionalidad de checkAddButton en: chequear stock en cart, manipular el dom.
+// TODO: Chequear y cambiar nombres de funciones polémicas:
+//		● moveProductStockFromThisTo()
+//		● cleanStorage()
 
-//Suavizar animacion de la aparacion de elementos en el cart
+// TODO: modularizar código
+
+// TODO: instalar librerias por npm
+
+// TODO: Dividir la funcionalidad de checkAddButton en: chequear stock en cart, manipular el dom.
+
+// TODO: Suavizar animacion de la aparacion de elementos en el cart
 
 
 
@@ -77,7 +83,7 @@ class Storage extends Array {
 			console.log('el valor fue actualizado');
 			return
 		}
-		console.log('no hay stock');
+		alertToastify(FRASE_STOCKUNAVAILABLE);
 	}
 
 	cleanStorage() {
@@ -112,6 +118,8 @@ class Storage extends Array {
 let shop = document.getElementById('shop');
 let cartContainer = document.getElementById('cartContainer');
 
+const FRASE_STOCKUNAVAILABLE = 'No hay más stock disponible';
+const FRASE_IMPOSSIBLEREDUCE = 'No puede tener menos de un producto';
 let genericDescription = 'Lorem ipsum dolor sit amet, consectetur adipisicing.';
 
 let store = new Storage(
@@ -165,14 +173,15 @@ function generateCart() {
 	cart.cleanStorage();
 
 	if(cart.calcTotal()) {
-		let totalRow = document.createElement('div');
-		let cartTotal = cart.calcTotal();
-
 		cartContainer.innerHTML = `<div class="container mt-2 d-flex justify-content-center">
 										<h2 class="display-5 text-dark text-uppercase paytoneone">Tu carrito</h2>
 									</div>
 									<div id="cartList" class="container-fluid">
 									</div>`;
+
+		let cartList = document.getElementById('cartList');
+		let totalRow = document.createElement('div');
+		let buyRow = document.createElement('div');
 
 		for(let product of cart) {
 			const {name, id, price, stock, img} = product;
@@ -189,7 +198,7 @@ function generateCart() {
 							<div class="col-4 offset-4 col-lg-1 my-3 p-2 offset-lg-3 my-lg-auto d-flex justify-content-evenly align-items-center border border-dark">
 									<button onclick="addOrRemoveFromCart(${id}, false)" class="m-0 h4 bg-transparent border-0 karla font__400">-</button>
 									<p class="m-0 h4 karla font__400">${stock}</p>
-									<button onclick="addOrRemoveFromCart(${id}, true)" class="m-0 h4 bg-transparent border-0 karla font__300">+</button>					
+									<button onclick="addOrRemoveFromCart(${id}, true)" class="m-0 h4 bg-transparent border-0 karla font__300">+</button>
 							</div>
 							<div class="col-lg-2 m-auto d-flex justify-content-center justify-content-lg-start">
 								<p class="ms-2 mb-3 h4 karla font__400">$${product.calcSubtotal()}</p>
@@ -201,13 +210,96 @@ function generateCart() {
 		}
 
 		totalRow.id = 'total-cart-row';
-		totalRow.className = 'container row mx-auto mb-3 py-2 border-top align-items-center justify-content-between';
-		totalRow.innerHTML = `<p class="col-1 h3 paytoneone">Total</p>
-							<p class="col-1 display-6 karla">$${cartTotal}</p>`;
-
+		totalRow.className =  'container row mx-auto mb-3 py-2 border-top align-items-center justify-content-between';
+		totalRow.innerHTML = `<p class="col-2 h3 paytoneone">Total</p>
+							<p class="col-6 col-md-4 col-lg-2 text-end display-6 karla">$${cart.calcTotal()}</p>`;
 		cartList.appendChild(totalRow);
+
+		buyRow.className =  'container row mx-auto px-0 justify-content-end';
+		buyRow.innerHTML = `<button onclick="confirmPurchase()" class="col-12 col-md-6 col-xl-3 h5 p-2 mb-4 text-uppercase enabled__addButton paytoneone">comprar</button>`;
+		cartList.appendChild(buyRow);
 	}
 }
+
+
+
+function generateReduceCartList() {
+	let totalRow = document.createElement('div');
+	let list = document.createElement('div');
+	list.className = 'container row';
+	list.innerHTML = `<div class="container row mx-auto border-bottom">
+						<div class="col-2 fs-6 text-start fw-bold karla">Cant.</div>
+						<div class="col-3 offset-1 fs-6 fw-bold karla">Producto</div>
+						<div class="col-3 fs-6 fw-bold karla">Precio</div>
+						<div class="col-3 fs-6 fw-bold karla">Subtotal</div>
+					</div>`;
+
+	for(let product of cart) {
+		const {name, stock, price} = product;
+		let row = document.createElement('div');
+		row.className = 'container row mx-auto border-top';
+
+		row.innerHTML = `<div class="col-2 fs-6 my-2">${stock}</div>
+						<div class="col-3 fs-6 my-2 offset-1">${name}</div>
+						<div class="col-3 fs-6 my-2">$${price}</div>
+						<div class="col-3 fs-6 my-2">$${product.calcSubtotal()}</div>`;
+		list.appendChild(row);
+	}
+
+	totalRow.className = 'container row py-3 mx-auto border-top border-2 justify-content-between';
+	totalRow.innerHTML = `<p class="col-3 text-start paytoneone">Total</p>
+					<p class="col-3 karla">$${cart.calcTotal()}</p>`;
+	list.appendChild(totalRow);
+
+	return list
+}
+
+
+
+function confirmPurchase() {
+	Swal.fire({
+		title: '¿Quieres confirmar tu compra?',
+		customClass: {
+			title: 'karla'
+		},
+		html: generateReduceCartList(),
+		showConfirmButton: true,
+		confirmButtonText: 'Comprar',
+		confirmButtonColor: '#63c979',
+		showCancelButton: true,
+		cancelButtonText: 'Volver',
+		cancelButtonColor: '#d33'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			Swal.fire({
+				title: 'Pago realizado',
+				text: 'Tu compra se concretó exitosamente',
+				icon: 'success',
+				showConfirmButton: true,
+				confirmButtonText: 'Listo',
+				showCloseButton: true
+		   });
+		}
+	})
+}
+
+
+
+function alertToastify(frase) {
+	Toastify({
+		text: frase,
+		duration: 800,
+		newWindow: true,
+		gravity: "top",
+		position: "right",
+		stopOnFocus: false,
+		style: {
+			color: '#f2f2da',
+			background: "#63c979"
+		}
+	}).showToast();
+}
+
 
 
 //Recorre el array cart en busca de los productos existentes. En base a ello los habilita o deshabilita los botones de agregar productos, aplicando los correspondientes estilos.
@@ -263,7 +355,7 @@ function addOrRemoveFromCart(IdProduct, operator) {
 
 	if(product){
 		if(-product.stock === operation){
-			console.log('No puede tener menos de una unidad');
+			alertToastify(FRASE_IMPOSSIBLEREDUCE);
 			return
 		}
 	}
