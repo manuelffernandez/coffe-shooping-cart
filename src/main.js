@@ -288,7 +288,7 @@ function confirmPurchase() {
 function alertToastify(frase) {
 	Toastify({
 		text: frase,
-		duration: 400,
+		duration: 800,
 		newWindow: true,
 		gravity: "top",
 		position: "right",
