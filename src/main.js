@@ -83,7 +83,7 @@ class Storage extends Array {
 			console.log('el valor fue actualizado');
 			return
 		}
-		console.log('no hay stock');
+		alertToastify(FRASE_STOCKUNAVAILABLE);
 	}
 
 	cleanStorage() {
@@ -118,6 +118,8 @@ class Storage extends Array {
 let shop = document.getElementById('shop');
 let cartContainer = document.getElementById('cartContainer');
 
+const FRASE_STOCKUNAVAILABLE = 'No hay más stock disponible';
+const FRASE_IMPOSSIBLEREDUCE = 'No puede tener menos de un producto';
 let genericDescription = 'Lorem ipsum dolor sit amet, consectetur adipisicing.';
 
 let store = new Storage(
@@ -283,6 +285,23 @@ function confirmPurchase() {
 
 
 
+function alertToastify(frase) {
+	Toastify({
+		text: frase,
+		duration: 400,
+		newWindow: true,
+		gravity: "top",
+		position: "right",
+		stopOnFocus: false,
+		style: {
+			color: '#f2f2da',
+			background: "#63c979"
+		}
+	}).showToast();
+}
+
+
+
 //Recorre el array cart en busca de los productos existentes. En base a ello los habilita o deshabilita los botones de agregar productos, aplicando los correspondientes estilos.
 function disableOrEnableAddBtn() {
 	cart.forEach(product => {
@@ -336,7 +355,7 @@ function addOrRemoveFromCart(IdProduct, operator) {
 
 	if(product){
 		if(-product.stock === operation){
-			console.log('No puede tener menos de una unidad');
+			alertToastify(FRASE_IMPOSSIBLEREDUCE);
 			return
 		}
 	}
