@@ -5,7 +5,6 @@
 
 // TODO: Chequear y cambiar nombres de funciones polémicas:
 //		● moveProductStockFromThisTo()
-//		● cleanStorage()
 
 // TODO: modularizar código
 
@@ -86,7 +85,7 @@ class Storage extends Array {
 		alertToastify(FRASE_STOCKUNAVAILABLE);
 	}
 
-	cleanStorage() {
+	deleteProdWithNoStock() {
 		this.forEach(product => {
 			if(!product.stock) {
 				let index = this.indexOf(product);
@@ -170,7 +169,7 @@ function generateShop() {
 //Genera las cards de los elementos del array 'cart' iterando a traves de sus elementos con un forOf
 //Para insertarlo en el DOM, se crea un elemento div y se utiliza el metodo 'appendChild()' en la referencia cartList
 function generateCart() {
-	cart.cleanStorage();
+	cart.deleteProdWithNoStock();
 
 	if(cart.calcTotal()) {
 		cartContainer.innerHTML = `<div class="container mt-2 d-flex justify-content-center">
@@ -372,7 +371,7 @@ function eraseProductFromCart(IdProduct) {
 	let amount = cart.findProduct(IdProduct).stock;
 
 	cart.moveProductStockFromThisTo(IdProduct, amount, store);
-	cart.cleanStorage();
+	cart.deleteProdWithNoStock();
 	updateLocalStorage(cart);
 	refreshIndexDOM();
 }
