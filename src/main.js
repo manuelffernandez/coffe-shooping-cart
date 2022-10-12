@@ -1,5 +1,6 @@
-
+// ===============================================
 // ==================== TAREA ====================
+// ===============================================
 
 // TODO: poner button de carrito en el navbar que invoque confirmPurchase()
 
@@ -8,11 +9,8 @@
 
 // TODO: modularizar código
 
-// TODO: instalar librerias por npm
-
 // TODO: Dividir la funcionalidad de checkAddButton en: chequear stock en cart, manipular el dom.
 
-// TODO: Suavizar animacion de la aparacion de elementos en el cart
 
 
 
@@ -21,9 +19,9 @@
 
 
 
-
-
+// ===============================================
 // ==================== CLASS ====================
+// ===============================================
 
 //CUANDO MODULARIZE EL CODIGO ACA VAN LOS IMPORTS DE LAS CLASSES
 //Las clases se suelen almacenar en ficheros individuales.
@@ -32,9 +30,9 @@
 
 //Representa productos
 class Item {
-	constructor(name, id, price, stock, desc, img) {
-		this.name = name;
+	constructor(id, name, price, stock, desc, img) {
 		this.id = id;
+		this.name = name;
 		this.price = price;
 		this.stock = stock;
 		this.desc = desc;
@@ -110,8 +108,9 @@ class Storage extends Array {
 
 
 
-
+// ===================================================
 // ==================== VARIABLES ====================
+// ===================================================
 
 //Referencias a los elementos del DOM
 let shop = document.getElementById('shop');
@@ -119,17 +118,20 @@ let cartContainer = document.getElementById('cartContainer');
 
 const FRASE_STOCKUNAVAILABLE = 'No hay más stock disponible';
 const FRASE_IMPOSSIBLEREDUCE = 'No puede tener menos de un producto';
+
 let genericDescription = 'Lorem ipsum dolor sit amet, consectetur adipisicing.';
+let url = 'https://634613bf745bd0dbd3761fe4.mockapi.io/products';
+let databaseStore = [];
 
-let store = new Storage(
-	new Item('Café', '1', 15, 10, genericDescription, './src/assets/img/cards_img/coffee.jpg'),
-	new Item('Jugo', '2', 20, 10, genericDescription, './src/assets/img/cards_img/juice.jpg'),
-	new Item('Medialuna', '3', 20, 10, genericDescription, './src/assets/img/cards_img/medialuna.jpg'),
-	new Item('Sandwich', '4', 30, 10, genericDescription, './src/assets/img/cards_img/sandwich.jpg')
-);
-
+let store = new Storage();
 let cart = new Storage();
 
+// let store = new Storage(
+// 	new Item('Café', '1', 15, 10, genericDescription, './src/assets/img/cards_img/coffee.jpg'),
+// 	new Item('Jugo', '2', 20, 10, genericDescription, './src/assets/img/cards_img/juice.jpg'),
+// 	new Item('Medialuna', '3', 20, 10, genericDescription, './src/assets/img/cards_img/medialuna.jpg'),
+// 	new Item('Sandwich', '4', 30, 10, genericDescription, './src/assets/img/cards_img/sandwich.jpg')
+// );
 
 
 
@@ -138,12 +140,16 @@ let cart = new Storage();
 
 
 
+
+
+// ===================================================
 // ==================== FUNCIONES ====================
+// ===================================================
 
 //Genera las cards de todos los productos del array 'sotre' por medio del método map
 function generateShop() {
 	shop.innerHTML = store.map(function(product) {
-		const {name, id, price, stock, desc, img} = product;
+		const {id, name, price, stock, desc, img} = product;
 
 		return `
 		<div id="store-card-${id}" class="col-12 col-sm-6 col-lg-3">
@@ -388,11 +394,42 @@ function checkAndUpdate() {
 	}
 }
 
+function synchronizeStoreWithDatabaseStore() {
+	databaseStore.forEach(product => {
+		const {id, name, price, stock, desc, img} = product;
+		let item = new Item(id,	name, price, stock, desc, img);
+
+		store.push(item);
+	});
+}
+
+
+// ==================================================================
+// ==================== FUNCIONES ASÍNCRONAS API ====================
+// ==================================================================
+function getDatabaseProducts() {
+	return fetch(url)
+    .then(response => response.json())
+    .catch(err => err);
+}
+
+async function updateLocalDatabaseStoreArray() {
+    console.log('loading items from database onto local array');
+    databaseStore = await getDatabaseProducts();
+	console.log(databaseStore);
+    console.log('loading complete');
+}
+
 
 
 function init() {
-	checkAndUpdate();
-	refreshIndexDOM();
+	updateLocalDatabaseStoreArray()
+		.then(() => {
+			synchronizeStoreWithDatabaseStore();
+			checkAndUpdate();
+			refreshIndexDOM();
+		})
+		.catch(err => console.log(err))
 }
 
 init();
