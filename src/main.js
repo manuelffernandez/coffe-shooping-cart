@@ -60,7 +60,7 @@ class Storage extends Array {
 	}
 
 	createProduct(product) {
-		this.push(new Item(product.name, product.id, product.price, 1, product.desc, product.img));
+		this.push(new Item(product.id, product.name, product.price, 1, product.desc, product.img));
 	}
 
 	moveProductStockFromThisTo(IdProduct, amount, storageToUpdate) {
