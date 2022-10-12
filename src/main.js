@@ -2,10 +2,11 @@
 // ==================== TAREA ====================
 // ===============================================
 
-// TODO: poner button de carrito en el navbar que invoque confirmPurchase()
+// TODO: poner button de carrito en el navbar que invoque showPurchaseAlert()
 
 // TODO: Chequear y cambiar nombres de funciones polémicas:
 //		● moveProductStockFromThisTo()
+//		● checkAndUpdate()
 
 // TODO: modularizar código
 
@@ -28,7 +29,7 @@
 //De forma que cada clase que creamos. debería estar en un fichero con su mismo nombre.
 //Ej.: Item.js tiene adentro la class Item
 
-//Representa productos
+
 class Item {
 	constructor(id, name, price, stock, desc, img) {
 		this.id = id;
@@ -53,9 +54,8 @@ class Item {
 	}
 }
 
-//Representa almacenamiento de Items.
 class Storage extends Array {
-	findProduct(IdProduct) {
+	referenceProduct(IdProduct) {
 		return this.find(product => product.id == IdProduct);
 	}
 
@@ -64,19 +64,19 @@ class Storage extends Array {
 	}
 
 	moveProductStockFromThisTo(IdProduct, amount, storageToUpdate) {
-		let product = this.findProduct(IdProduct);
+		let product = this.referenceProduct(IdProduct);
 
 		if(product.checkStock(amount)) {
 			product.stock -= amount;
 
-			if(storageToUpdate.findProduct(IdProduct) === undefined) {
+			if(storageToUpdate.referenceProduct(IdProduct) === undefined) {
 				storageToUpdate.createProduct(product);
-				storageToUpdate.findProduct(product.id).stock = amount;
+				storageToUpdate.referenceProduct(product.id).stock = amount;
 				console.log('el valor fue actualizado');
 				return
 			}
 
-			storageToUpdate.findProduct(product.id).stock += amount;
+			storageToUpdate.referenceProduct(product.id).stock += amount;
 			console.log('el valor fue actualizado');
 			return
 		}
@@ -119,19 +119,12 @@ let cartContainer = document.getElementById('cartContainer');
 const FRASE_STOCKUNAVAILABLE = 'No hay más stock disponible';
 const FRASE_IMPOSSIBLEREDUCE = 'No puede tener menos de un producto';
 
-let genericDescription = 'Lorem ipsum dolor sit amet, consectetur adipisicing.';
 let url = 'https://634613bf745bd0dbd3761fe4.mockapi.io/products';
 let databaseStore = [];
 
 let store = new Storage();
 let cart = new Storage();
 
-// let store = new Storage(
-// 	new Item('Café', '1', 15, 10, genericDescription, './src/assets/img/cards_img/coffee.jpg'),
-// 	new Item('Jugo', '2', 20, 10, genericDescription, './src/assets/img/cards_img/juice.jpg'),
-// 	new Item('Medialuna', '3', 20, 10, genericDescription, './src/assets/img/cards_img/medialuna.jpg'),
-// 	new Item('Sandwich', '4', 30, 10, genericDescription, './src/assets/img/cards_img/sandwich.jpg')
-// );
 
 
 
@@ -146,7 +139,6 @@ let cart = new Storage();
 // ==================== FUNCIONES ====================
 // ===================================================
 
-//Genera las cards de todos los productos del array 'sotre' por medio del método map
 function generateShop() {
 	shop.innerHTML = store.map(function(product) {
 		const {id, name, price, stock, desc, img} = product;
@@ -172,8 +164,6 @@ function generateShop() {
 
 
 
-//Genera las cards de los elementos del array 'cart' iterando a traves de sus elementos con un forOf
-//Para insertarlo en el DOM, se crea un elemento div y se utiliza el metodo 'appendChild()' en la referencia cartList
 function generateCart() {
 	cart.deleteProdWithNoStock();
 
@@ -221,14 +211,14 @@ function generateCart() {
 		cartList.appendChild(totalRow);
 
 		buyRow.className =  'container row mx-auto px-0 justify-content-end';
-		buyRow.innerHTML = `<button onclick="confirmPurchase()" class="col-12 col-md-6 col-xl-3 h5 p-2 mb-4 text-uppercase enabled__addButton paytoneone">comprar</button>`;
+		buyRow.innerHTML = `<button onclick="showPurchaseAlert()" class="col-12 col-md-6 col-xl-3 h5 p-2 mb-4 text-uppercase enabled__addButton paytoneone">comprar</button>`;
 		cartList.appendChild(buyRow);
 	}
 }
 
 
 
-function generateReduceCartList() {
+function generateAlertCartList() {
 	let totalRow = document.createElement('div');
 	let list = document.createElement('div');
 	list.className = 'container row';
@@ -261,13 +251,13 @@ function generateReduceCartList() {
 
 
 
-function confirmPurchase() {
+function showPurchaseAlert() {
 	Swal.fire({
 		title: '¿Quieres confirmar tu compra?',
 		customClass: {
 			title: 'karla'
 		},
-		html: generateReduceCartList(),
+		html: generateAlertCartList(),
 		showConfirmButton: true,
 		confirmButtonText: 'Comprar',
 		confirmButtonColor: '#63c979',
@@ -307,7 +297,6 @@ function alertToastify(frase) {
 
 
 
-//Recorre el array cart en busca de los productos existentes. En base a ello los habilita o deshabilita los botones de agregar productos, aplicando los correspondientes estilos.
 function disableOrEnableAddBtn() {
 	cart.forEach(product => {
 		const {id, stock} = product;
@@ -327,7 +316,6 @@ function disableOrEnableAddBtn() {
 
 
 
-//Actualiza los elementos del DOM en base a los datos de los objetos 'Storage'
 function refreshIndexDOM() {
 	shop.innerHTML = '';
 	generateShop();
@@ -340,23 +328,22 @@ function refreshIndexDOM() {
 
 
 
-function updateLocalStorage(cart) {
+function updateLocalStorageCart(cart) {
 	localStorage.setItem('user_cart', JSON.stringify(cart));
 }
 
 
 
-function getLocalStorage() {
+function getCartFromLocalStorage() {
 	return JSON.parse(localStorage.getItem('user_cart'));
 }
 
 
 
-//Agrega o remueve una unidad del producto especificado por id del carrito
-//El booleano 'operator' define si se agrega o remueve
+
 function addOrRemoveFromCart(IdProduct, operator) {
 	let operation = operator ? 1 : -1;
-	let product = cart.findProduct(IdProduct);
+	let product = cart.referenceProduct(IdProduct);
 
 	if(product){
 		if(-product.stock === operation){
@@ -366,7 +353,7 @@ function addOrRemoveFromCart(IdProduct, operator) {
 	}
 
 	store.moveProductStockFromThisTo(IdProduct, operation, cart);
-	updateLocalStorage(cart);
+	updateLocalStorageCart(cart);
 	refreshIndexDOM();
 }
 
@@ -374,18 +361,18 @@ function addOrRemoveFromCart(IdProduct, operator) {
 
 //Vacia todas las unidades de un producto especificado por id del carrito
 function eraseProductFromCart(IdProduct) {
-	let amount = cart.findProduct(IdProduct).stock;
+	let amount = cart.referenceProduct(IdProduct).stock;
 
 	cart.moveProductStockFromThisTo(IdProduct, amount, store);
 	cart.deleteProdWithNoStock();
-	updateLocalStorage(cart);
+	updateLocalStorageCart(cart);
 	refreshIndexDOM();
 }
 
 
 
 function checkAndUpdate() {
-	const cartLS = getLocalStorage();
+	const cartLS = getCartFromLocalStorage();
 
 	if(cartLS) {
 		cartLS.map(element => {
