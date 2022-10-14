@@ -21,7 +21,7 @@ function generateShop(store) {
 	}).join("");
 }
 
-function generateCart(cartTotal) {
+function generateCart(cart, cartTotal) {
 	cartContainer.innerHTML = `<div class="container mt-2 d-flex justify-content-center">
 									<h2 class="display-5 text-dark text-uppercase paytoneone">Tu carrito</h2>
 								</div>
@@ -67,7 +67,7 @@ function generateCart(cartTotal) {
 	cartList.appendChild(totalRow);
 
 	buyRow.className =  'container row mx-auto px-0 justify-content-end';
-	buyRow.innerHTML = `<button onclick="showPurchaseAlert(${cartTotal})" class="col-12 col-md-6 col-xl-3 h5 p-2 mb-4 text-uppercase enabled__addButton paytoneone">comprar</button>`;
+	buyRow.innerHTML = `<button onclick="showPurchaseAlert(${cart, cartTotal})" class="col-12 col-md-6 col-xl-3 h5 p-2 mb-4 text-uppercase enabled__addButton paytoneone">comprar</button>`;
 	cartList.appendChild(buyRow);
 }
 
@@ -96,12 +96,7 @@ function changeButtonStyleToEnable(button) {
 	button.classList.add('enabled__addButton');
 }
 
-
-
-
-
-
-function generateAlertCartList(cartTotal) {
+function generateAlertCartList(cart, cartTotal) {
 	let totalRow = document.createElement('div');
 	let list = document.createElement('div');
 	list.className = 'container row';
@@ -133,13 +128,13 @@ function generateAlertCartList(cartTotal) {
 	return list
 }
 
-function showPurchaseAlert(cartTotal) {
+function showPurchaseAlert(cart, cartTotal) {
 	Swal.fire({
 		title: '¿Quieres confirmar tu compra?',
 		customClass: {
 			title: 'karla'
 		},
-		html: generateAlertCartList(cartTotal),
+		html: generateAlertCartList(cart, cartTotal),
 		showConfirmButton: true,
 		confirmButtonText: 'Comprar',
 		confirmButtonColor: '#63c979',
@@ -160,5 +155,5 @@ function showPurchaseAlert(cartTotal) {
 	})
 }
 
-const {generateShop, generateCart, alertToastify, changeButtonStyleToDisable, changeButtonStyleToEnable} = ui;
+const ui = {generateShop, generateCart, alertToastify, changeButtonStyleToDisable, changeButtonStyleToEnable};
 export default ui;
