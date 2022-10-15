@@ -16,8 +16,8 @@ import Item  from "./entities.js";
 import getDatabaseProducts from "./services.js"
 import { updateLocalStorageCart, getCartFromLocalStorage } from "./localStorage.js";
 import ui from "./ui.js";
-window.addOrRemoveFromCart = addOrRemoveFromCart;
-window.eraseProductFromCart = eraseProductFromCart;
+
+
 
 
 
@@ -28,7 +28,6 @@ window.eraseProductFromCart = eraseProductFromCart;
 // ===============================================
 // ==================== CLASS ====================
 // ===============================================
-
 class Storage extends Array {
 	referenceProduct(IdProduct) {
 		return this.find(product => product.id == IdProduct);
@@ -73,19 +72,9 @@ class Storage extends Array {
 	}
 }
 
-
-
-
-
-
-
-
-
 // ===================================================
 // ==================== VARIABLES ====================
 // ===================================================
-
-//Referencias a los elementos del DOM
 let shop = document.getElementById('shop');
 let cartContainer = document.getElementById('cartContainer');
 
@@ -96,6 +85,12 @@ let databaseStore = [];
 
 let store = new Storage();
 let cart = new Storage();
+
+let operatorsList = {
+	add: addUnitToCart,
+	remove: removeUnitFromCart,
+	erase: eraseProductFromCart
+}
 
 
 
@@ -110,6 +105,33 @@ let cart = new Storage();
 // ===================================================
 // ==================== FUNCIONES ====================
 // ===================================================
+function eraseProductFromCart(IdProduct) {
+	let amount = cart.referenceProduct(IdProduct).stock;
+
+	cart.moveProductStockFromThisTo(IdProduct, amount, store);
+	cart.deleteProdWithNoStock();
+}
+
+function addUnitToCart(IdProduct) {
+    const unit = 1;
+
+	store.moveProductStockFromThisTo(IdProduct, unit, cart);
+}
+
+function removeUnitFromCart(IdProduct) {
+	let product = cart.referenceProduct(IdProduct);
+    const removeUnit = -1;
+
+	if(product){
+		if(-product.stock === removeUnit){
+			ui.alertToastify(FRASE_IMPOSSIBLEREDUCE);
+			return
+		}
+	}
+
+	store.moveProductStockFromThisTo(IdProduct, operation, cart);
+}
+
 
 function disableOrEnableAddBtn() {
 	cart.forEach(product => {
@@ -141,31 +163,6 @@ function refreshIndexDOM() {
 	disableOrEnableAddBtn();
 }
 
-function addOrRemoveFromCart(IdProduct, operator) {
-	let operation = operator ? 1 : -1;
-	let product = cart.referenceProduct(IdProduct);
-
-	if(product){
-		if(-product.stock === operation){
-			ui.alertToastify(FRASE_IMPOSSIBLEREDUCE);
-			return
-		}
-	}
-
-	store.moveProductStockFromThisTo(IdProduct, operation, cart);
-	updateLocalStorageCart(cart);
-	refreshIndexDOM();
-}
-
-function eraseProductFromCart(IdProduct) {
-	let amount = cart.referenceProduct(IdProduct).stock;
-
-	cart.moveProductStockFromThisTo(IdProduct, amount, store);
-	cart.deleteProdWithNoStock();
-	updateLocalStorageCart(cart);
-	refreshIndexDOM();
-}
-
 function checkAndUpdate() {
 	const cartLS = getCartFromLocalStorage();
 
@@ -187,6 +184,25 @@ function synchronizeStoreWithDatabaseStore() {
 
 async function updateLocalDatabaseStoreArray() {
     databaseStore = await getDatabaseProducts();
+}
+
+function defineButtonOperator(button) {
+	const id = button.id;
+	let operatorTag = id.substring(0, id.indexOf('-'))
+
+	return operatorsList[operatorTag]
+}
+
+function initEventListener(buttonsArray) {
+	for(button of buttonsArray) {
+		const operator = defineButtonOperator(button);
+
+		button.addEventListener('click', () => {
+			operator(button.id, cart, store)
+			updateLocalStorageCart(cart);
+			refreshIndexDOM();
+		})
+	}
 }
 
 function init() {

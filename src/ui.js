@@ -1,3 +1,5 @@
+// window.showPurchaseAlert = showPurchaseAlert;
+
 function generateShop(store) {
 	shop.innerHTML = store.map(function(product) {
 		const {id, name, price, stock, desc, img} = product;
@@ -11,7 +13,7 @@ function generateShop(store) {
 					<p class="card-text font__300">${desc}</p>
 					<div class="d-flex justify-content-between">
 						<p class="h5 fw-semibold m-0 karla">$${price}</p>
-						<button id="add-btn-${id}" onclick="addOrRemoveFromCart(${id}, true)" class="h5 p-2 text-uppercase enabled__addButton paytoneone">Agregar</button>
+						<button id="add-prod-btn-${id}" onclick="addOrRemoveFromCart(${id}, true)" class="h5 p-2 text-uppercase enabled__addButton paytoneone">Agregar</button>
 					</div>
 					<p class="card-text"><small class="text-muted">Stock disponible: ${stock} unidades</small></p>
 				</div>
@@ -21,7 +23,7 @@ function generateShop(store) {
 	}).join("");
 }
 
-function generateCart(cart, cartTotal) {
+function generateCart(cart) {
 	cartContainer.innerHTML = `<div class="container mt-2 d-flex justify-content-center">
 									<h2 class="display-5 text-dark text-uppercase paytoneone">Tu carrito</h2>
 								</div>
@@ -34,7 +36,6 @@ function generateCart(cart, cartTotal) {
 
 	for(let product of cart) {
 		const {name, id, price, stock, img} = product;
-        const prodSubtotal = price*stock;
 
 		let row = document.createElement('div');
 
@@ -47,15 +48,15 @@ function generateCart(cart, cartTotal) {
 							</div>
 						</div>
 						<div class="col-4 offset-4 col-lg-1 my-3 p-2 offset-lg-3 my-lg-auto d-flex justify-content-evenly align-items-center border border-dark">
-								<button onclick="addOrRemoveFromCart(${id}, false)" class="m-0 h4 bg-transparent border-0 karla font__400">-</button>
+								<button id="add-minus-btn-${id}" onclick="addOrRemoveFromCart(${id}, false)" class="m-0 h4 bg-transparent border-0 karla font__400">-</button>
 								<p class="m-0 h4 karla font__400">${stock}</p>
-								<button onclick="addOrRemoveFromCart(${id}, true)" class="m-0 h4 bg-transparent border-0 karla font__300">+</button>
+								<button id="add-plus-btn-${id}" onclick="addOrRemoveFromCart(${id}, true)" class="m-0 h4 bg-transparent border-0 karla font__300">+</button>
 						</div>
 						<div class="col-lg-2 m-auto d-flex justify-content-center justify-content-lg-start">
-							<p class="ms-2 mb-3 h4 karla font__400">$${prodSubtotal}</p>
+							<p class="ms-2 mb-3 h4 karla font__400">$${product.calcSubtotal()}</p>
 						</div>
 						<div class="col-lg-1 m-auto d-flex justify-content-center">
-							<button onclick="eraseProductFromCart(${id})" class="p-3 border border-danger text-danger text-uppercase deleteButton karla bg-transparent">Eliminar</button>
+							<button id="erase-btn-${id}" onclick="eraseProductFromCart(${id})" class="p-3 border border-danger text-danger text-uppercase deleteButton karla bg-transparent">Eliminar</button>
 						</div>`;
 		cartList.appendChild(row);
 	}
@@ -63,11 +64,11 @@ function generateCart(cart, cartTotal) {
 	totalRow.id = 'total-cart-row';
 	totalRow.className =  'container row mx-auto mb-3 py-2 border-top align-items-center justify-content-between';
 	totalRow.innerHTML = `<p class="col-2 h3 paytoneone">Total</p>
-						<p class="col-6 col-md-4 col-lg-2 text-end display-6 karla">$${cartTotal}</p>`;
+						<p class="col-6 col-md-4 col-lg-2 text-end display-6 karla">$${cart.calcTotal()}</p>`;
 	cartList.appendChild(totalRow);
 
 	buyRow.className =  'container row mx-auto px-0 justify-content-end';
-	buyRow.innerHTML = `<button onclick="showPurchaseAlert(${cart, cartTotal})" class="col-12 col-md-6 col-xl-3 h5 p-2 mb-4 text-uppercase enabled__addButton paytoneone">comprar</button>`;
+	buyRow.innerHTML = `<button id="buy-btn" class="col-12 col-md-6 col-xl-3 h5 p-2 mb-4 text-uppercase enabled__addButton paytoneone">comprar</button>`;
 	cartList.appendChild(buyRow);
 }
 
@@ -96,7 +97,9 @@ function changeButtonStyleToEnable(button) {
 	button.classList.add('enabled__addButton');
 }
 
-function generateAlertCartList(cart, cartTotal) {
+function generateAlertCartList(cart) {
+    console.log('generateAlertCartList');
+    console.log(cart);
 	let totalRow = document.createElement('div');
 	let list = document.createElement('div');
 	list.className = 'container row';
@@ -106,35 +109,34 @@ function generateAlertCartList(cart, cartTotal) {
 						<div class="col-3 fs-6 fw-bold karla">Precio</div>
 						<div class="col-3 fs-6 fw-bold karla">Subtotal</div>
 					</div>`;
-
+    console.log(cart);
 	for(let product of cart) {
 		const {name, stock, price} = product;
-        const prodSubtotal = stock*price;
 		let row = document.createElement('div');
 		row.className = 'container row mx-auto border-top';
 
 		row.innerHTML = `<div class="col-2 fs-6 my-2">${stock}</div>
 						<div class="col-3 fs-6 my-2 offset-1">${name}</div>
 						<div class="col-3 fs-6 my-2">$${price}</div>
-						<div class="col-3 fs-6 my-2">$${prodSubtotal}</div>`;
+						<div class="col-3 fs-6 my-2">$${product.calcSubtotal()}</div>`;
 		list.appendChild(row);
 	}
 
 	totalRow.className = 'container row py-3 mx-auto border-top border-2 justify-content-between';
 	totalRow.innerHTML = `<p class="col-3 text-start paytoneone">Total</p>
-					<p class="col-3 karla">$${cartTotal}</p>`;
+					<p class="col-3 karla">$${cart.calcTotal()}</p>`;
 	list.appendChild(totalRow);
 
 	return list
 }
 
-function showPurchaseAlert(cart, cartTotal) {
+function showPurchaseAlert(cart) {
 	Swal.fire({
 		title: '¿Quieres confirmar tu compra?',
 		customClass: {
 			title: 'karla'
 		},
-		html: generateAlertCartList(cart, cartTotal),
+		html: generateAlertCartList(cart),
 		showConfirmButton: true,
 		confirmButtonText: 'Comprar',
 		confirmButtonColor: '#63c979',
