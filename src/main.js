@@ -6,7 +6,6 @@
 
 // TODO: Chequear y cambiar nombres de funciones polémicas:
 //		● moveProductStockFromThisTo()
-//		● checkAndUpdate()
 
 // TODO: modularizar código
 
@@ -163,7 +162,7 @@ function refreshIndexDOM() {
 	disableOrEnableAddBtn();
 }
 
-function checkAndUpdate() {
+function checkLocalStorageAndUpdateCart() {
 	const cartLS = getCartFromLocalStorage();
 
 	if(cartLS) {
@@ -209,7 +208,7 @@ function init() {
 	updateLocalDatabaseStoreArray()
 		.then(() => {
 			synchronizeStoreWithDatabaseStore();
-			checkAndUpdate();
+			checkLocalStorageAndUpdateCart();
 			refreshIndexDOM();
 		})
 		.catch(err => console.log(err))
