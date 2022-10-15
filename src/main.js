@@ -86,10 +86,10 @@ let databaseStore = [];
 let store = new Storage();
 let cart = new Storage();
 
-let operatorsList = {
-	add: addUnitToCart,
-	remove: removeUnitFromCart,
-	erase: eraseProductFromCart
+let buttonsFunctionsList = {
+		add: addUnitToCart,
+		remove: removeUnitFromCart,
+		erase: eraseProductFromCart,
 }
 
 
@@ -188,9 +188,9 @@ async function updateLocalDatabaseStoreArray() {
 
 function defineButtonOperator(button) {
 	const id = button.id;
-	let operatorTag = id.substring(0, id.indexOf('-'))
+	let functionTag = id.substring(0, id.indexOf('-'))
 
-	return operatorsList[operatorTag]
+	return buttonsFunctionsList[functionTag]
 }
 
 function initEventListener(buttonsArray) {
