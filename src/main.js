@@ -198,7 +198,7 @@ function initEventListener(buttonsArray) {
 		const operator = defineButtonOperator(button);
 
 		button.addEventListener('click', () => {
-			operator(button.id, cart, store)
+			operator(button.id)
 			updateLocalStorageCart(cart);
 			refreshIndexDOM();
 		})
