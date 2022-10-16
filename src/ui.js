@@ -152,6 +152,7 @@ function showPurchaseAlert(cart) {
 				cancelButton: 'karla'
 			},
 			showConfirmButton: false,
+			showCloseButton: true,
 			showCancelButton: true,
 			cancelButtonText: 'Volver',
 			cancelButtonColor: '#63c979'
