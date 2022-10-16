@@ -8,8 +8,7 @@ class Item {
     }
 }
 
-
-let url = 'https://634613bf745bd0dbd3761fe4.mockapi.io/products';
+const url = 'https://634613bf745bd0dbd3761fe4.mockapi.io/products';
 let genericDescription = 'Lorem ipsum dolor sit amet, consectetur adipisicing.';
 
 let defaultStore = [
