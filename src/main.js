@@ -1,26 +1,15 @@
-// ===============================================
-// ==================== TAREA ====================
-// ===============================================
-
+// ============================================
+// ==================== HW ====================
+// ============================================
 // TODO: poner button de carrito en el navbar que invoque showPurchaseAlert()
 
-// TODO: Chequear y cambiar nombres de funciones polémicas:
-//		● moveProductStockFromThisTo()
-
-// TODO: modularizar código
-
+// =================================================
+// ==================== IMPORTS ====================
+// =================================================
 import Item  from "./entities.js";
 import getDatabaseProducts from "./services.js"
 import { updateLocalStorageCart, getCartFromLocalStorage } from "./localStorage.js";
 import ui from "./ui.js";
-
-
-
-
-
-
-
-
 
 // ===============================================
 // ==================== CLASS ====================
@@ -49,7 +38,7 @@ class Storage extends Array {
 			storageToUpdate.referenceProduct(product.id).stock += amount;
 			return
 		}
-		ui.alertToastify(FRASE_STOCKUNAVAILABLE);
+		ui.alertToastify(PHRASE_STOCKUNAVAILABLE);
 	}
 
 	deleteProdWithNoStock() {
@@ -72,14 +61,13 @@ class Storage extends Array {
 // ===================================================
 // ==================== VARIABLES ====================
 // ===================================================
-let shop = document.getElementById('shop');
-let cartContainer = document.getElementById('cartContainer');
+const shop = document.getElementById('shop');
+const cartContainer = document.getElementById('cartContainer');
 
-const FRASE_STOCKUNAVAILABLE = 'No hay más stock disponible';
-const FRASE_IMPOSSIBLEREDUCE = 'No puede tener menos de un producto';
+const PHRASE_STOCKUNAVAILABLE = 'No hay más stock disponible';
+const PHRASE_IMPOSSIBLEREDUCE = 'No puede tener menos de un producto';
 
 let databaseStore = [];
-
 let store = new Storage();
 let cart = new Storage();
 
@@ -90,18 +78,8 @@ let buttonsFunctionsList = {
 		confirm: confirmPurchase
 }
 
-
-
-
-
-
-
-
-
-
-
 // ===================================================
-// ==================== FUNCIONES ====================
+// ==================== FUNCTIONS ====================
 // ===================================================
 function eraseProductFromCart(IdProduct) {
 	let amount = cart.referenceProduct(IdProduct).stock;
@@ -122,7 +100,7 @@ function removeUnitFromCart(IdProduct) {
 
 	if(product){
 		if(-product.stock === removeUnit){
-			ui.alertToastify(FRASE_IMPOSSIBLEREDUCE);
+			ui.alertToastify(PHRASE_IMPOSSIBLEREDUCE);
 			return
 		}
 	}
@@ -159,21 +137,21 @@ function disableOrEnableAddBtn() {
 	});
 }
 
-function defineButtonOperator(button) {
+function defineButtonFunction(button) {
 	const id = button.id;
-	let functionTag = id.substring(0, id.indexOf('-'))
+	const functionTag = id.substring(0, id.indexOf('-'))
 
 	return buttonsFunctionsList[functionTag]
 }
 
 function initEventListener(buttonsArray) {
 	for(let button of buttonsArray) {
-		const operator = defineButtonOperator(button);
+		const buttonFunction = defineButtonFunction(button);
 
 		button.addEventListener('click', () => {
-			let id = button.id.charAt(button.id.length - 1)
+			const id = button.id.charAt(button.id.length - 1)
 
-			operator(id)
+			buttonFunction(id)
 			updateLocalStorageCart(cart);
 			refreshIndexDOM();
 		})
