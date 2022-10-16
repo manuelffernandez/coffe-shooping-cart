@@ -127,19 +127,38 @@ function generateAlertCartList(cart) {
 }
 
 function showPurchaseAlert(cart) {
-	return Swal.fire({
-		title: '¿Quieres confirmar tu compra?',
-		customClass: {
-			title: 'karla'
-		},
-		html: generateAlertCartList(cart),
-		showConfirmButton: true,
-		confirmButtonText: 'Comprar',
-		confirmButtonColor: '#63c979',
-		showCancelButton: true,
-		cancelButtonText: 'Volver',
-		cancelButtonColor: '#d33'
-	})
+	if(cart.calcTotal()) {
+		return Swal.fire({
+			title: '¿Quieres confirmar tu compra?',
+			customClass: {
+				title: 'karla',
+				confirmButton: 'karla',
+				cancelButton: 'karla'
+			},
+			html: generateAlertCartList(cart),
+			showConfirmButton: true,
+			confirmButtonText: 'Comprar',
+			confirmButtonColor: '#63c979',
+			showCancelButton: true,
+			cancelButtonText: 'Volver',
+			cancelButtonColor: '#d33'
+		})
+	} else {
+		return Swal.fire({
+			title: 'No tienes ningún producto en tu carrito.',
+			customClass: {
+				title: 'karla',
+				confirmButton: 'karla',
+				cancelButton: 'karla'
+			},
+			showConfirmButton: false,
+			showCloseButton: true,
+			showCancelButton: true,
+			cancelButtonText: 'Volver',
+			cancelButtonColor: '#63c979'
+		})
+	}
+
 }
 
 function showCompletedPurchaseAlert() {
