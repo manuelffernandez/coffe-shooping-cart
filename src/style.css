@@ -64,7 +64,7 @@
 	transition: all 0.3s;
 }
 
-/* important to override BS styles */
+/* important to override bootstrap styles */
 .deleteButton:hover {
 	background-color: red !important;
 	color: white !important;
