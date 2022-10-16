@@ -9,8 +9,6 @@
 
 // TODO: modularizar código
 
-// TODO: Dividir la funcionalidad de checkAddButton en: chequear stock en cart, manipular el dom.
-
 import Item  from "./entities.js";
 import getDatabaseProducts from "./services.js"
 import { updateLocalStorageCart, getCartFromLocalStorage } from "./localStorage.js";
@@ -89,6 +87,7 @@ let buttonsFunctionsList = {
 		add: addUnitToCart,
 		remove: removeUnitFromCart,
 		erase: eraseProductFromCart,
+		confirm: confirmPurchase
 }
 
 
@@ -128,9 +127,22 @@ function removeUnitFromCart(IdProduct) {
 		}
 	}
 
-	store.moveProductStockFromThisTo(IdProduct, operation, cart);
+	store.moveProductStockFromThisTo(IdProduct, removeUnit, cart);
 }
 
+function completePurchase() {
+	console.log('compra completada');
+}
+
+function confirmPurchase() {
+	ui.showPurchaseAlert(cart)
+		.then((result) => {
+			if (result.isConfirmed) {
+				completePurchase();
+				ui.showCompletedPurchaseAlert()
+			}
+		})
+}
 
 function disableOrEnableAddBtn() {
 	cart.forEach(product => {
@@ -147,19 +159,45 @@ function disableOrEnableAddBtn() {
 	});
 }
 
-function refreshIndexDOM() {
-	const cartTotal = cart.calcTotal();
+function defineButtonOperator(button) {
+	const id = button.id;
+	let functionTag = id.substring(0, id.indexOf('-'))
 
+	return buttonsFunctionsList[functionTag]
+}
+
+function initEventListener(buttonsArray) {
+	for(let button of buttonsArray) {
+		const operator = defineButtonOperator(button);
+
+		button.addEventListener('click', () => {
+			let id = button.id.charAt(button.id.length - 1)
+
+			operator(id)
+			updateLocalStorageCart(cart);
+			refreshIndexDOM();
+		})
+	}
+}
+
+function getAllListenedButtons() {
+	let buttons = document.querySelectorAll('.listenedButton')
+	return [...buttons]
+}
+
+function refreshIndexDOM() {
 	shop.innerHTML = '';
 	ui.generateShop(store);
 
 	cartContainer.innerHTML = '';
 	cart.deleteProdWithNoStock();
-	if(cartTotal) {
-		ui.generateCart(cart, cartTotal);
-	}
 
+	if(cart.calcTotal()) {
+		ui.generateCart(cart);
+	}
 	disableOrEnableAddBtn();
+	initEventListener(getAllListenedButtons());
+
 }
 
 function checkLocalStorageAndUpdateCart() {
@@ -183,25 +221,6 @@ function synchronizeStoreWithDatabaseStore() {
 
 async function updateLocalDatabaseStoreArray() {
     databaseStore = await getDatabaseProducts();
-}
-
-function defineButtonOperator(button) {
-	const id = button.id;
-	let functionTag = id.substring(0, id.indexOf('-'))
-
-	return buttonsFunctionsList[functionTag]
-}
-
-function initEventListener(buttonsArray) {
-	for(button of buttonsArray) {
-		const operator = defineButtonOperator(button);
-
-		button.addEventListener('click', () => {
-			operator(button.id)
-			updateLocalStorageCart(cart);
-			refreshIndexDOM();
-		})
-	}
 }
 
 function init() {
