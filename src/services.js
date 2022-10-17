@@ -1,4 +1,4 @@
-let url = 'https://634613bf745bd0dbd3761fe4.mockapi.io/products';
+const url = 'https://634613bf745bd0dbd3761fe4.mockapi.io/products';
 
 export default function getDatabaseProducts() {
 	return fetch(url)
