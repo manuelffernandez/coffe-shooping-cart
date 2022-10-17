@@ -11,7 +11,9 @@ function generateShop(store) {
 					<p class="card-text font__300">${desc}</p>
 					<div class="d-flex justify-content-between">
 						<p class="h5 fw-semibold m-0 karla">$${price}</p>
+						<a href="#card-${id}">
 						<button id="add-btn-${id}" class="h5 p-2 text-uppercase enabled__addButton paytoneone listenedButton">Agregar</button>
+						</a>
 					</div>
 					<p class="card-text"><small class="text-muted">Stock disponible: ${stock} unidades</small></p>
 				</div>
@@ -37,6 +39,7 @@ function generateCart(cart) {
 
 		let row = document.createElement('div');
 
+		row.id = `card-${id}`
 		row.className = 'container row mx-auto mb-3 py-2 border';
 		row.innerHTML = `<div class="d-flex col-6 offset-3 flex-column align-items-center col-lg-4 offset-lg-0 flex-lg-row justify-content-lg-start">
 							<img src="${img}" class="img-fluid w-auto">
@@ -54,7 +57,9 @@ function generateCart(cart) {
 							<p class="ms-2 mb-3 h4 karla font__400">$${product.calcSubtotal()}</p>
 						</div>
 						<div class="col-lg-1 m-auto d-flex justify-content-center">
-							<button id="erase-btn-${id}" class="p-3 border border-danger text-danger text-uppercase deleteButton karla bg-transparent listenedButton">Eliminar</button>
+							<a href="#cartContainer">
+								<button id="erase-btn-${id}" class="p-3 border border-danger text-danger text-uppercase deleteButton karla bg-transparent listenedButton">Eliminar</button>
+							</a>
 						</div>`;
 		cartList.appendChild(row);
 	}
