@@ -76,7 +76,7 @@
 
 /* important to override bootstrap styles */
 .deleteButton:hover {
-	background-color: rgb(202, 44, 44) !important;
+	background-color: var(--color-red) !important;
 	color: white !important;
 }
 
