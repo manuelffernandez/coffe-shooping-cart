@@ -10,6 +10,7 @@
   --color-white: #f2f2da;
   --color-green: #63c979;
   --color-grey: #d5d5d5;
+  --color-red: #ca2c2c;
 }
 
 .paytoneone {
@@ -75,7 +76,7 @@
 
 /* important to override bootstrap styles */
 .deleteButton:hover {
-	background-color: red !important;
+	background-color: rgb(202, 44, 44) !important;
 	color: white !important;
 }
 
