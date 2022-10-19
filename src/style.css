@@ -6,6 +6,8 @@
 /*'Karla'*/
 @import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400&display=swap');
 
+/* !important were added to override bootstrap/swal2 styles */
+
 :root {
   --color-white: #f2f2da;
   --color-green: #63c979;
@@ -14,19 +16,19 @@
 }
 
 .bgc__white {
-	background-color: var(--color-white);
+	background-color: var(--color-white) !important;
 }
 
 .bgc__green {
-	background-color: var(--color-green);
+	background-color: var(--color-green) !important;
 }
 
 .bgc__grey {
-	background-color: var(--color-grey);
+	background-color: var(--color-grey) !important;
 }
 
 .bgc__red {
-	background-color: var(--color-red);
+	background-color: var(--color-red) !important;
 }
 
 .paytoneone {
@@ -90,7 +92,6 @@
 	transition: all 0.3s;
 }
 
-/* important to override bootstrap styles */
 .deleteButton:hover {
 	background-color: var(--color-red) !important;
 	color: white !important;
