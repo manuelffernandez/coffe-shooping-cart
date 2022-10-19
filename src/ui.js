@@ -1,3 +1,9 @@
+const swalTypoClassKarla = {
+	title: 'karla',
+	confirmButton: 'karla',
+	cancelButton: 'karla'
+}
+
 function generateShop(store) {
 	shop.innerHTML = store.map(function(product) {
 		const {id, name, price, stock, desc, img} = product;
@@ -135,11 +141,7 @@ function showPurchaseAlert(cart) {
 	if(cart.calcTotal()) {
 		return Swal.fire({
 			title: '¿Quieres confirmar tu compra?',
-			customClass: {
-				title: 'karla',
-				confirmButton: 'karla',
-				cancelButton: 'karla'
-			},
+			customClass: swalTypoClassKarla,
 			html: generateAlertCartList(cart),
 			showConfirmButton: true,
 			confirmButtonText: 'Comprar',
@@ -150,12 +152,8 @@ function showPurchaseAlert(cart) {
 		})
 	} else {
 		return Swal.fire({
+			customClass: swalTypoClassKarla,
 			title: 'No tienes ningún producto en tu carrito.',
-			customClass: {
-				title: 'karla',
-				confirmButton: 'karla',
-				cancelButton: 'karla'
-			},
 			showConfirmButton: false,
 			showCloseButton: true,
 			showCancelButton: true,
@@ -168,6 +166,7 @@ function showPurchaseAlert(cart) {
 
 function showCompletedPurchaseAlert() {
 	Swal.fire({
+		customClass: swalTypoClassKarla,
 		title: 'Pago realizado',
 		text: 'Tu compra se concretó exitosamente',
 		icon: 'success',
