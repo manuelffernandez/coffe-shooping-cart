@@ -1,7 +1,7 @@
 // ============================================
 // ==================== HW ====================
 // ============================================
-// TODO: poner button de carrito en el navbar que invoque showPurchaseAlert()
+
 
 // =================================================
 // ==================== IMPORTS ====================
@@ -9,7 +9,7 @@
 import Item  from "./entities.js";
 import getDatabaseProducts from "./services.js"
 import { updateLocalStorageCart, getCartFromLocalStorage } from "./localStorage.js";
-import ui from "./ui.js";
+import ui from "./ui/ui.js";
 
 // ===============================================
 // ==================== CLASS ====================
@@ -198,7 +198,9 @@ function synchronizeStoreWithDatabaseStore() {
 }
 
 async function updateLocalDatabaseStoreArray() {
+	ui.showLoadingAlert();
     databaseStore = await getDatabaseProducts();
+	ui.closeAlert();
 }
 
 function init() {
