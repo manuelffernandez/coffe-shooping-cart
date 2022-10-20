@@ -1,8 +1,4 @@
-const swalTypoKarlaClass = {
-	title: 'karla',
-	confirmButton: 'karla bgc__green',
-	cancelButton: 'karla bgc__red'
-}
+import { swalConfig } from "./swalConfig.js";
 
 function generateShop(store) {
 	shop.innerHTML = store.map(function(product) {
@@ -107,88 +103,78 @@ function changeButtonStyleToEnable(button) {
 }
 
 function generateAlertCartList(cart) {
-	let totalRow = document.createElement('div');
-	let list = document.createElement('div');
-	list.className = 'container row';
-	list.innerHTML = `<div class="container row mx-auto border-bottom">
-						<div class="col-2 fs-6 text-start fw-bold karla">Cant.</div>
-						<div class="col-3 offset-1 fs-6 fw-bold karla">Producto</div>
-						<div class="col-3 fs-6 fw-bold karla">Precio</div>
-						<div class="col-3 fs-6 fw-bold karla">Subtotal</div>
-					</div>`;
+	if(cart) {
+		let totalRow = document.createElement('div');
+		let list = document.createElement('div');
+		list.className = 'container row';
+		list.innerHTML = `<div class="container row mx-auto border-bottom">
+							<div class="col-2 fs-6 text-start fw-bold karla">Cant.</div>
+							<div class="col-3 offset-1 fs-6 fw-bold karla">Producto</div>
+							<div class="col-3 fs-6 fw-bold karla">Precio</div>
+							<div class="col-3 fs-6 fw-bold karla">Subtotal</div>
+						</div>`;
 
-	for(let product of cart) {
-		const {name, stock, price} = product;
-		let row = document.createElement('div');
-		row.className = 'container row mx-auto border-top';
+		for(let product of cart) {
+			const {name, stock, price} = product;
+			let row = document.createElement('div');
+			row.className = 'container row mx-auto border-top';
 
-		row.innerHTML = `<div class="col-2 fs-6 my-2">${stock}</div>
-						<div class="col-3 fs-6 my-2 offset-1">${name}</div>
-						<div class="col-3 fs-6 my-2">$${price}</div>
-						<div class="col-3 fs-6 my-2">$${product.calcSubtotal()}</div>`;
-		list.appendChild(row);
+			row.innerHTML = `<div class="col-2 fs-6 my-2">${stock}</div>
+							<div class="col-3 fs-6 my-2 offset-1">${name}</div>
+							<div class="col-3 fs-6 my-2">$${price}</div>
+							<div class="col-3 fs-6 my-2">$${product.calcSubtotal()}</div>`;
+			list.appendChild(row);
+		}
+
+		totalRow.className = 'container row py-3 mx-auto border-top border-2 justify-content-between';
+		totalRow.innerHTML = `<p class="col-3 text-start paytoneone">Total</p>
+						<p class="col-3 karla">$${cart.calcTotal()}</p>`;
+		list.appendChild(totalRow);
+
+		return list
+	} else {
+		return ''
 	}
+}
 
-	totalRow.className = 'container row py-3 mx-auto border-top border-2 justify-content-between';
-	totalRow.innerHTML = `<p class="col-3 text-start paytoneone">Total</p>
-					<p class="col-3 karla">$${cart.calcTotal()}</p>`;
-	list.appendChild(totalRow);
-
-	return list
+function swalAlert(configObj, cart = undefined) {
+	if(configObj.html === '') {
+		configObj.html = generateAlertCartList(cart);
+	}
+	return Swal.fire(configObj);
 }
 
 function showPurchaseAlert(cart) {
 	if(cart.calcTotal()) {
-		return Swal.fire({
-			title: '¿Quieres confirmar tu compra?',
-			customClass: swalTypoKarlaClass,
-			html: generateAlertCartList(cart),
-			showConfirmButton: true,
-			confirmButtonText: 'Comprar',
-			showCancelButton: true,
-			cancelButtonText: 'Volver'
-		})
+		return swalAlert(swalConfig.purchaseWithProd, cart);
 	} else {
-		return Swal.fire({
-			customClass: swalTypoKarlaClass,
-			title: 'No tienes ningún producto en tu carrito.',
-			showConfirmButton: false,
-			confirmButtonText: '',
-			showCancelButton: true,
-			cancelButtonText: 'Volver'
-		})
+		return swalAlert(swalConfig.purchaseWithoutProd);
 	}
 
 }
 
 function showCompletedPurchaseAlert() {
-	Swal.fire({
-		customClass: swalTypoKarlaClass,
-		title: 'Pago realizado',
-		text: 'Tu compra se concretó exitosamente',
-		icon: 'success',
-		showConfirmButton: true,
-		confirmButtonText: 'Listo',
-		showCancelButton: false,
-		cancelButtonText: ''
-   });
+	swalAlert(swalConfig.completedPurchase);
 }
 
 function showLoadingAlert() {
-	Swal.fire({
-		customClass: swalTypoKarlaClass,
-		title: 'Cargando productos',
-		html: '<img src="./public/loadingSpin.svg" />',
-		showConfirmButton: false,
-		confirmButtonText: '',
-		showCancelButton: false,
-		cancelButtonText: ''
-   });
+	swalAlert(swalConfig.loading);
 }
 
 function closeAlert() {
 	Swal.close();
 }
 
-const ui = {generateShop, generateCart, showPurchaseAlert, showCompletedPurchaseAlert, showLoadingAlert, closeAlert, alertToastify, changeButtonStyleToDisable, changeButtonStyleToEnable};
+const ui = {
+	generateShop,
+	generateCart,
+	showPurchaseAlert,
+	showCompletedPurchaseAlert,
+	showLoadingAlert,
+	closeAlert,
+	alertToastify,
+	changeButtonStyleToDisable,
+	changeButtonStyleToEnable
+};
+
 export default ui;
