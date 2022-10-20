@@ -1,7 +1,7 @@
-const swalTypoClassKarla = {
+const swalTypoKarlaClass = {
 	title: 'karla',
-	confirmButton: 'karla',
-	cancelButton: 'karla'
+	confirmButton: 'karla bgc__green',
+	cancelButton: 'karla bgc__red'
 }
 
 function generateShop(store) {
@@ -141,24 +141,21 @@ function showPurchaseAlert(cart) {
 	if(cart.calcTotal()) {
 		return Swal.fire({
 			title: '¿Quieres confirmar tu compra?',
-			customClass: swalTypoClassKarla,
+			customClass: swalTypoKarlaClass,
 			html: generateAlertCartList(cart),
 			showConfirmButton: true,
 			confirmButtonText: 'Comprar',
-			confirmButtonColor: '#63c979',
 			showCancelButton: true,
-			cancelButtonText: 'Volver',
-			cancelButtonColor: '#d33'
+			cancelButtonText: 'Volver'
 		})
 	} else {
 		return Swal.fire({
-			customClass: swalTypoClassKarla,
+			customClass: swalTypoKarlaClass,
 			title: 'No tienes ningún producto en tu carrito.',
 			showConfirmButton: false,
-			showCloseButton: true,
+			confirmButtonText: '',
 			showCancelButton: true,
-			cancelButtonText: 'Volver',
-			cancelButtonColor: '#63c979'
+			cancelButtonText: 'Volver'
 		})
 	}
 
@@ -166,15 +163,32 @@ function showPurchaseAlert(cart) {
 
 function showCompletedPurchaseAlert() {
 	Swal.fire({
-		customClass: swalTypoClassKarla,
+		customClass: swalTypoKarlaClass,
 		title: 'Pago realizado',
 		text: 'Tu compra se concretó exitosamente',
 		icon: 'success',
 		showConfirmButton: true,
 		confirmButtonText: 'Listo',
-		showCloseButton: true
+		showCancelButton: false,
+		cancelButtonText: ''
    });
 }
 
-const ui = {generateShop, generateCart, showPurchaseAlert, showCompletedPurchaseAlert, alertToastify, changeButtonStyleToDisable, changeButtonStyleToEnable};
+function showLoadingAlert() {
+	Swal.fire({
+		customClass: swalTypoKarlaClass,
+		title: 'Cargando productos',
+		html: '<img src="./public/loadingSpin.svg" />',
+		showConfirmButton: false,
+		confirmButtonText: '',
+		showCancelButton: false,
+		cancelButtonText: ''
+   });
+}
+
+function closeAlert() {
+	Swal.close();
+}
+
+const ui = {generateShop, generateCart, showPurchaseAlert, showCompletedPurchaseAlert, showLoadingAlert, closeAlert, alertToastify, changeButtonStyleToDisable, changeButtonStyleToEnable};
 export default ui;
