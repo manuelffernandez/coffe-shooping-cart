@@ -141,8 +141,8 @@ function generateAlertCartList(cart) {
 	}
 }
 
-function swalAlert(configObj, cart = undefined) {
-	if(configObj.html === '') {
+function swalAlert(configObj, cart) {
+	if(configObj === swalConfig.purchaseWithProd) {
 		configObj.html = generateAlertCartList(cart);
 	}
 	return Swal.fire(configObj);
