@@ -1,4 +1,11 @@
 import { swalConfig } from "./swalConfig.js";
+import toastyStyles from "./toastyConfig.js";
+
+const toastyReference = {
+	red: toastyStyles.red,
+	green: toastyStyles.green,
+	white: toastyStyles.white
+};
 
 function generateShop(store) {
 	shop.innerHTML = store.map(function(product) {
@@ -14,7 +21,7 @@ function generateShop(store) {
 					<div class="d-flex justify-content-between">
 						<p class="h5 fw-semibold m-0 karla">$${price}</p>
 						<a href="#card-${id}">
-						<button id="add-btn-${id}" class="h5 p-2 text-uppercase enabled__addButton paytoneone listenedButton">Agregar</button>
+						<button id="addNew-btn-${id}" class="h5 p-2 text-uppercase enabled__addButton paytoneone listenedButton">Agregar</button>
 						</a>
 					</div>
 					<p class="card-text"><small class="text-muted">Stock disponible: ${stock} unidades</small></p>
@@ -77,7 +84,7 @@ function generateCart(cart) {
 	cartList.appendChild(buyRow);
 }
 
-function alertToastify(frase) {
+function alertToastify(frase, color) {
 	Toastify({
 		text: frase,
 		duration: 800,
@@ -85,10 +92,7 @@ function alertToastify(frase) {
 		gravity: "top",
 		position: "right",
 		stopOnFocus: false,
-		style: {
-			color: '#f2f2da',
-			background: "#63c979"
-		}
+		style: toastyReference[color]
 	}).showToast();
 }
 

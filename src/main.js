@@ -29,16 +29,16 @@ class Storage extends Array {
 		if(product.checkStock(amount)) {
 			product.stock -= amount;
 
+
 			if(storageToUpdate.referenceProduct(IdProduct) === undefined) {
 				storageToUpdate.createProduct(product);
 				storageToUpdate.referenceProduct(product.id).stock = amount;
 				return
 			}
-
 			storageToUpdate.referenceProduct(product.id).stock += amount;
 			return
 		}
-		ui.alertToastify(PHRASE_STOCKUNAVAILABLE);
+		ui.alertToastify(PHRASE_STOCKUNAVAILABLE, 'white');
 	}
 
 	deleteProdWithNoStock() {
@@ -66,12 +66,15 @@ const cartContainer = document.getElementById('cartContainer');
 
 const PHRASE_STOCKUNAVAILABLE = 'No hay más stock disponible';
 const PHRASE_IMPOSSIBLEREDUCE = 'No puede tener menos de un producto';
+const PHRASE_PRODUCTDELETED = 'Producto eliminado';
+const PHRASE_PRODUCTADDED = 'Producto agregado';
 
 let databaseStore = [];
 let store = new Storage();
 let cart = new Storage();
 
 let buttonsFunctionsList = {
+		addNew: addNewUnitToCart,
 		add: addUnitToCart,
 		remove: removeUnitFromCart,
 		erase: eraseProductFromCart,
@@ -81,17 +84,25 @@ let buttonsFunctionsList = {
 // ===================================================
 // ==================== FUNCTIONS ====================
 // ===================================================
+function addUnitToCart(IdProduct) {
+    const unit = 1;
+
+	store.moveProductStockFromThisTo(IdProduct, unit, cart);
+}
+
+function addNewUnitToCart(IdProduct) {
+	const unit = 1;
+
+	store.moveProductStockFromThisTo(IdProduct, unit, cart);
+	ui.alertToastify(PHRASE_PRODUCTADDED, 'green');
+}
+
 function eraseProductFromCart(IdProduct) {
 	let amount = cart.referenceProduct(IdProduct).stock;
 
 	cart.moveProductStockFromThisTo(IdProduct, amount, store);
 	cart.deleteProdWithNoStock();
-}
-
-function addUnitToCart(IdProduct) {
-    const unit = 1;
-
-	store.moveProductStockFromThisTo(IdProduct, unit, cart);
+	ui.alertToastify(PHRASE_PRODUCTDELETED, 'red');
 }
 
 function removeUnitFromCart(IdProduct) {
@@ -100,7 +111,7 @@ function removeUnitFromCart(IdProduct) {
 
 	if(product){
 		if(-product.stock === removeUnit){
-			ui.alertToastify(PHRASE_IMPOSSIBLEREDUCE);
+			ui.alertToastify(PHRASE_IMPOSSIBLEREDUCE, 'white');
 			return
 		}
 	}
@@ -125,7 +136,7 @@ function confirmPurchase() {
 function disableOrEnableAddBtn() {
 	cart.forEach(product => {
 		const {id, stock} = product;
-		let button = document.querySelector(`#add-btn-${id}`);
+		let button = document.querySelector(`#addNew-btn-${id}`);
 
 		if(stock) {
 			ui.changeButtonStyleToDisable(button);
