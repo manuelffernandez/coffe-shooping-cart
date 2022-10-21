@@ -1,4 +1,5 @@
 import { swalConfig } from "./swalConfig.js";
+import { colorPalette } from "./colorPalette.js"
 
 function generateShop(store) {
 	shop.innerHTML = store.map(function(product) {
@@ -86,8 +87,8 @@ function alertToastify(frase) {
 		position: "right",
 		stopOnFocus: false,
 		style: {
-			color: '#f2f2da',
-			background: "#63c979"
+			color: colorPalette.white,
+			background: colorPalette.green
 		}
 	}).showToast();
 }
