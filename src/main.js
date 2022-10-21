@@ -7,7 +7,7 @@
 // ==================== IMPORTS ====================
 // =================================================
 import Item  from "./entities.js";
-import getDatabaseProducts from "./services.js"
+import getDatabaseProducts from "./services/services.js"
 import { updateLocalStorageCart, getCartFromLocalStorage } from "./localStorage.js";
 import ui from "./ui/ui.js";
 
@@ -84,12 +84,6 @@ let buttonsFunctionsList = {
 // ===================================================
 // ==================== FUNCTIONS ====================
 // ===================================================
-function addUnitToCart(IdProduct) {
-    const unit = 1;
-
-	store.moveProductStockFromThisTo(IdProduct, unit, cart);
-}
-
 function addNewUnitToCart(IdProduct) {
 	const unit = 1;
 
@@ -97,12 +91,10 @@ function addNewUnitToCart(IdProduct) {
 	ui.alertToastify(PHRASE_PRODUCTADDED, 'green');
 }
 
-function eraseProductFromCart(IdProduct) {
-	let amount = cart.referenceProduct(IdProduct).stock;
+function addUnitToCart(IdProduct) {
+    const unit = 1;
 
-	cart.moveProductStockFromThisTo(IdProduct, amount, store);
-	cart.deleteProdWithNoStock();
-	ui.alertToastify(PHRASE_PRODUCTDELETED, 'red');
+	store.moveProductStockFromThisTo(IdProduct, unit, cart);
 }
 
 function removeUnitFromCart(IdProduct) {
@@ -119,8 +111,12 @@ function removeUnitFromCart(IdProduct) {
 	store.moveProductStockFromThisTo(IdProduct, removeUnit, cart);
 }
 
-function completePurchase() {
-	console.log('compra completada');
+function eraseProductFromCart(IdProduct) {
+	let amount = cart.referenceProduct(IdProduct).stock;
+
+	cart.moveProductStockFromThisTo(IdProduct, amount, store);
+	cart.deleteProdWithNoStock();
+	ui.alertToastify(PHRASE_PRODUCTDELETED, 'red');
 }
 
 function confirmPurchase() {
@@ -131,6 +127,10 @@ function confirmPurchase() {
 				ui.showCompletedPurchaseAlert()
 			}
 		})
+}
+
+function completePurchase() {
+	console.log('compra completada');
 }
 
 function disableOrEnableAddBtn() {
@@ -186,7 +186,6 @@ function refreshIndexDOM() {
 	}
 	disableOrEnableAddBtn();
 	initEventListener(getAllListenedButtons());
-
 }
 
 function checkLocalStorageAndUpdateCart() {
