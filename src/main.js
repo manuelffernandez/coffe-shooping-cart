@@ -66,6 +66,8 @@ const cartContainer = document.getElementById('cartContainer');
 
 const PHRASE_STOCKUNAVAILABLE = 'No hay más stock disponible';
 const PHRASE_IMPOSSIBLEREDUCE = 'No puede tener menos de un producto';
+const PHRASE_PRODUCTDELETED = 'Producto eliminado';
+const PHRASE_PRODUCTADDED = 'Producto agregado';
 
 let databaseStore = [];
 let store = new Storage();
@@ -86,12 +88,14 @@ function eraseProductFromCart(IdProduct) {
 
 	cart.moveProductStockFromThisTo(IdProduct, amount, store);
 	cart.deleteProdWithNoStock();
+	ui.alertToastify(PHRASE_PRODUCTDELETED);
 }
 
 function addUnitToCart(IdProduct) {
     const unit = 1;
 
 	store.moveProductStockFromThisTo(IdProduct, unit, cart);
+	ui.alertToastify(PHRASE_PRODUCTADDED);
 }
 
 function removeUnitFromCart(IdProduct) {
