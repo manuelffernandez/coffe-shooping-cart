@@ -1,5 +1,11 @@
 import { swalConfig } from "./swalConfig.js";
-import { colorPalette } from "./colorPalette.js"
+import toastyStyles from "./toastyConfig.js";
+
+const toastyReference = {
+	red: toastyStyles.red,
+	green: toastyStyles.green,
+	white: toastyStyles.white
+};
 
 function generateShop(store) {
 	shop.innerHTML = store.map(function(product) {
@@ -78,7 +84,7 @@ function generateCart(cart) {
 	cartList.appendChild(buyRow);
 }
 
-function alertToastify(frase) {
+function alertToastify(frase, color) {
 	Toastify({
 		text: frase,
 		duration: 800,
@@ -86,10 +92,7 @@ function alertToastify(frase) {
 		gravity: "top",
 		position: "right",
 		stopOnFocus: false,
-		style: {
-			color: colorPalette.white,
-			background: colorPalette.green
-		}
+		style: toastyReference[color]
 	}).showToast();
 }
 
