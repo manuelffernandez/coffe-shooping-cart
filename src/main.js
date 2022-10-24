@@ -212,8 +212,8 @@ function synchronizeStoreWithDatabaseStore() {
 }
 
 async function updateLocalDatabaseStoreArray() {
-	ui.showLoadingAlert();
-    databaseStore = await getDatabaseProducts();
+	ui.showLoadingAlert('Cargando productos');
+    databaseStore = await services.getDatabaseProducts();
 	ui.closeAlert();
 }
 
