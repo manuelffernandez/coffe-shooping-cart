@@ -7,7 +7,7 @@
 // ==================== IMPORTS ====================
 // =================================================
 import Item  from "./entities.js";
-import getDatabaseProducts from "./services/services.js"
+import services from "./services/services.js"
 import { updateLocalStorageCart, getCartFromLocalStorage } from "./localStorage.js";
 import ui from "./ui/ui.js";
 
