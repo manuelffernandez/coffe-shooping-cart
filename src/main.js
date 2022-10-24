@@ -82,7 +82,8 @@ let buttonsFunctionsList = {
 		add: addUnitToCart,
 		remove: removeUnitFromCart,
 		erase: eraseProductFromCart,
-		confirm: confirmPurchase
+		confirm: confirmPurchase,
+		reset: resetApp
 }
 
 // ===================================================
@@ -128,13 +129,33 @@ function confirmPurchase() {
 		.then((result) => {
 			if (result.isConfirmed) {
 				completePurchase();
-				ui.showCompletedPurchaseAlert()
 			}
 		})
 }
 
-function completePurchase() {
-	console.log('compra completada');
+async function completePurchase() {
+	ui.showLoadingAlert('Procesando compra');
+	await services.updateDatabaseProductStock(store, cart)
+	await services.postPurchase(cart)
+	cart.clearOut();
+	updateLocalStorageCart(cart);
+	ui.closeAlert();
+	refreshIndexDOM();
+	ui.showCompletedPurchaseAlert();
+}
+
+function resetApp() {
+	ui.showConfirmResetAppAlert()
+		.then(async (result) => {
+			if(result.isConfirmed) {
+				ui.showLoadingAlert('Reiniciando aplicación');
+				await services.restoreDatabaseToDefault();
+				cart.clearOut();
+				updateLocalStorageCart(cart);
+				ui.closeAlert();
+				window.location.reload();
+			}
+		})
 }
 
 function disableOrEnableAddBtn() {
