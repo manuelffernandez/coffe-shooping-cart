@@ -38,7 +38,7 @@ const completedPurchase = {
 
 const loading = {
     customClass: styleConfig,
-    title: 'Cargando productos',
+    title: 'Cargando',
     html: '<img src="./public/loadingSpin.svg" />',
     showConfirmButton: false,
     confirmButtonText: '',
@@ -46,4 +46,15 @@ const loading = {
     cancelButtonText: ''
 };
 
-export const swalConfig = { purchaseWithProd, purchaseWithoutProd, completedPurchase, loading }
+const confirmReset = {
+    customClass: styleConfig,
+    title: '¿Está seguro que desea reiniciar la aplicación?',
+    text: 'Esto borrará todo el historial de compras y restaruará el stock de los productos',
+    html: '',
+    showConfirmButton: true,
+    confirmButtonText: 'Reniciar',
+    showCancelButton: true,
+    cancelButtonText: 'Volver'
+}
+
+export const swalConfig = { purchaseWithProd, purchaseWithoutProd, completedPurchase, loading, confirmReset }
