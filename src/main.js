@@ -56,6 +56,10 @@ class Storage extends Array {
 		this.forEach(product => total += product.calcSubtotal());
 		return total;
 	}
+
+	clearOut() {
+		this.splice(0, this.length)
+	}
 }
 
 // ===================================================
