@@ -25,10 +25,8 @@ async function updateDatabaseProductStock(store, cart) {
             })
         })
         .then(res => {
-            if(res.ok) {
-                console.log(`producto: ${product.name} publicado exitosamente`);
-            } else {
-                console.log(`Algo salió mal. Código de error: ${res.status}`)
+            if(!res.ok) {
+                console.error('There was an error!', res.status);
             }
         })
         .catch(err => {
