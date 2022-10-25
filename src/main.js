@@ -162,11 +162,12 @@ function resetApp() {
 
 // ============== BUTTONS ============== //
 function disableOrEnableAddNewButton() {
-	cart.forEach(product => {
+	store.forEach(product => {
 		const {id, stock} = product;
+		const hasStock = cart.referenceProduct(id)?.stock;
 		let button = document.querySelector(`#addNew-btn-${id}`);
 
-		if(stock) {
+		if(!stock || hasStock) {
 			ui.changeButtonStyleToDisable(button);
 			button.disabled = true;
 		} else {
