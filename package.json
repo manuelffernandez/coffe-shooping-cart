@@ -1,0 +1,24 @@
+{
+  "dependencies": {},
+  "name": "coffe-shopping-cart",
+  "description": "This is a fictional e-shop website that emulates a shopping cart. \r The logic of the app is made using vanilla JS.",
+  "version": "1.0.0",
+  "main": "./main.js",
+  "type": "module",
+  "devDependencies": {
+    "node-fetch": "^3.2.10"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manuelffernandez/coffe-shopping-cart.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/manuelffernandez/coffe-shopping-cart/issues"
+  },
+  "homepage": "https://github.com/manuelffernandez/coffe-shopping-cart#readme"
+}

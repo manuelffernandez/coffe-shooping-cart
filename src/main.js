@@ -7,7 +7,7 @@
 // ==================== IMPORTS ====================
 // =================================================
 import Item  from "./entities.js";
-import getDatabaseProducts from "./services.js"
+import services from "./services/services.js"
 import { updateLocalStorageCart, getCartFromLocalStorage } from "./localStorage.js";
 import ui from "./ui/ui.js";
 
@@ -56,6 +56,10 @@ class Storage extends Array {
 		this.forEach(product => total += product.calcSubtotal());
 		return total;
 	}
+
+	clearOut() {
+		this.splice(0, this.length)
+	}
 }
 
 // ===================================================
@@ -78,18 +82,13 @@ let buttonsFunctionsList = {
 		add: addUnitToCart,
 		remove: removeUnitFromCart,
 		erase: eraseProductFromCart,
-		confirm: confirmPurchase
+		confirm: confirmPurchase,
+		reset: resetApp
 }
 
 // ===================================================
 // ==================== FUNCTIONS ====================
 // ===================================================
-function addUnitToCart(IdProduct) {
-    const unit = 1;
-
-	store.moveProductStockFromThisTo(IdProduct, unit, cart);
-}
-
 function addNewUnitToCart(IdProduct) {
 	const unit = 1;
 
@@ -97,12 +96,10 @@ function addNewUnitToCart(IdProduct) {
 	ui.alertToastify(PHRASE_PRODUCTADDED, 'green');
 }
 
-function eraseProductFromCart(IdProduct) {
-	let amount = cart.referenceProduct(IdProduct).stock;
+function addUnitToCart(IdProduct) {
+    const unit = 1;
 
-	cart.moveProductStockFromThisTo(IdProduct, amount, store);
-	cart.deleteProdWithNoStock();
-	ui.alertToastify(PHRASE_PRODUCTDELETED, 'red');
+	store.moveProductStockFromThisTo(IdProduct, unit, cart);
 }
 
 function removeUnitFromCart(IdProduct) {
@@ -119,8 +116,12 @@ function removeUnitFromCart(IdProduct) {
 	store.moveProductStockFromThisTo(IdProduct, removeUnit, cart);
 }
 
-function completePurchase() {
-	console.log('compra completada');
+function eraseProductFromCart(IdProduct) {
+	let amount = cart.referenceProduct(IdProduct).stock;
+
+	cart.moveProductStockFromThisTo(IdProduct, amount, store);
+	cart.deleteProdWithNoStock();
+	ui.alertToastify(PHRASE_PRODUCTDELETED, 'red');
 }
 
 function confirmPurchase() {
@@ -128,12 +129,36 @@ function confirmPurchase() {
 		.then((result) => {
 			if (result.isConfirmed) {
 				completePurchase();
-				ui.showCompletedPurchaseAlert()
 			}
 		})
 }
 
-function disableOrEnableAddBtn() {
+async function completePurchase() {
+	ui.showLoadingAlert('Procesando compra');
+	await services.updateDatabaseProductStock(store, cart)
+	await services.postPurchase(cart)
+	cart.clearOut();
+	updateLocalStorageCart(cart);
+	ui.closeAlert();
+	refreshIndexDOM();
+	ui.showCompletedPurchaseAlert();
+}
+
+function resetApp() {
+	ui.showConfirmResetAppAlert()
+		.then(async (result) => {
+			if(result.isConfirmed) {
+				ui.showLoadingAlert('Reiniciando aplicación');
+				await services.restoreDatabaseToDefault();
+				cart.clearOut();
+				updateLocalStorageCart(cart);
+				ui.closeAlert();
+				window.location.reload();
+			}
+		})
+}
+
+function disableOrEnableAddNewButton() {
 	cart.forEach(product => {
 		const {id, stock} = product;
 		let button = document.querySelector(`#addNew-btn-${id}`);
@@ -184,9 +209,8 @@ function refreshIndexDOM() {
 	if(cart.calcTotal()) {
 		ui.generateCart(cart);
 	}
-	disableOrEnableAddBtn();
+	disableOrEnableAddNewButton();
 	initEventListener(getAllListenedButtons());
-
 }
 
 function checkLocalStorageAndUpdateCart() {
@@ -209,8 +233,8 @@ function synchronizeStoreWithDatabaseStore() {
 }
 
 async function updateLocalDatabaseStoreArray() {
-	ui.showLoadingAlert();
-    databaseStore = await getDatabaseProducts();
+	ui.showLoadingAlert('Cargando productos');
+    databaseStore = await services.getDatabaseProducts();
 	ui.closeAlert();
 }
 

@@ -141,9 +141,12 @@ function generateAlertCartList(cart) {
 	}
 }
 
-function swalAlert(configObj, cart) {
+function swalAlert(configObj, cart, optionalTitle) {
 	if(configObj === swalConfig.purchaseWithProd) {
 		configObj.html = generateAlertCartList(cart);
+	}
+	if(optionalTitle) {
+		configObj.title = optionalTitle;
 	}
 	return Swal.fire(configObj);
 }
@@ -161,8 +164,12 @@ function showCompletedPurchaseAlert() {
 	swalAlert(swalConfig.completedPurchase);
 }
 
-function showLoadingAlert() {
-	swalAlert(swalConfig.loading);
+function showConfirmResetAppAlert() {
+	return swalAlert(swalConfig.confirmReset);
+}
+
+function showLoadingAlert(optionalTitle) {
+	swalAlert(swalConfig.loading, null, optionalTitle);
 }
 
 function closeAlert() {
@@ -175,6 +182,7 @@ const ui = {
 	showPurchaseAlert,
 	showCompletedPurchaseAlert,
 	showLoadingAlert,
+	showConfirmResetAppAlert,
 	closeAlert,
 	alertToastify,
 	changeButtonStyleToDisable,
