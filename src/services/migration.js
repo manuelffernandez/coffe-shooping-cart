@@ -31,6 +31,7 @@ function postProductsResourceItem(productObj = {}) {
     })
     .then(res => res)
     .catch(err => {
+        console.error('There was an error!', err);
         throw new Error(err);
     })
 }
