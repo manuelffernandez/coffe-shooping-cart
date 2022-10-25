@@ -89,6 +89,8 @@ let buttonsFunctionsList = {
 // ===================================================
 // ==================== FUNCTIONS ====================
 // ===================================================
+
+// ============== BUTTONS FUNCTIONS ============== //
 function addNewUnitToCart(IdProduct) {
 	const unit = 1;
 
@@ -158,6 +160,7 @@ function resetApp() {
 		})
 }
 
+// ============== BUTTONS ============== //
 function disableOrEnableAddNewButton() {
 	cart.forEach(product => {
 		const {id, stock} = product;
@@ -199,20 +202,7 @@ function getAllListenedButtons() {
 	return [...buttons]
 }
 
-function refreshIndexDOM() {
-	shop.innerHTML = '';
-	ui.generateShop(store);
-
-	cartContainer.innerHTML = '';
-	cart.deleteProdWithNoStock();
-
-	if(cart.calcTotal()) {
-		ui.generateCart(cart);
-	}
-	disableOrEnableAddNewButton();
-	initEventListener(getAllListenedButtons());
-}
-
+// ============== LOCALSTORAGE ============== //
 function checkLocalStorageAndUpdateCart() {
 	const cartLS = getCartFromLocalStorage();
 
@@ -236,6 +226,21 @@ async function updateLocalDatabaseStoreArray() {
 	ui.showLoadingAlert('Cargando productos');
     databaseStore = await services.getDatabaseProducts();
 	ui.closeAlert();
+}
+
+// ============== INIT ============== //
+function refreshIndexDOM() {
+	shop.innerHTML = '';
+	ui.generateShop(store);
+
+	cartContainer.innerHTML = '';
+	cart.deleteProdWithNoStock();
+
+	if(cart.calcTotal()) {
+		ui.generateCart(cart);
+	}
+	disableOrEnableAddNewButton();
+	initEventListener(getAllListenedButtons());
 }
 
 function init() {
