@@ -7,6 +7,7 @@ function getDatabasePurchases(url) {
             console.log(`Algo salió mal. Código de error: ${res.status}`)
         })
         .catch(err => {
+            console.error('There was an error!', err);
             throw new Error(err);
         })
 }
@@ -18,6 +19,12 @@ export async function deleteAllPurchases(url) {
         await fetch(url + `/${purchases[i].id}`, {
             method: 'DELETE'
         })
+            .then(res => {
+                if(!res.ok) {
+                    console.error('There was an error!', res.status);
+                    return
+                }
+            })
     }
 }
 
@@ -30,11 +37,17 @@ export async function restoreProductsStock(url) {
             },
             body: JSON.stringify({
                 stock: 10
-            })})
-            .then(res => res)
-            // .catch(err => {
-            //     throw new Error(err);
-            // })
-            .catch(err => console.log(err))
-        }
+            })
+        })
+            .then(res => {
+                if(!res.ok) {
+                    console.error('There was an error!', res.status);
+                    return
+                }
+            })
+            .catch(err => {
+                console.error('There was an error!', err);
+                throw new Error(err);
+            })
     }
+}

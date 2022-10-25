@@ -7,6 +7,7 @@ function getDatabaseProducts() {
 	return fetch(URL_PRODUCTS)
     .then(response => response.json())
     .catch(err => {
+        console.error('There was an error!', err);
         throw new Error(err);
     });
 }
@@ -31,6 +32,7 @@ async function updateDatabaseProductStock(store, cart) {
             }
         })
         .catch(err => {
+            console.error('There was an error!', err);
             throw new Error(err);
         })
     }
@@ -45,20 +47,19 @@ function postPurchase(cart) {
         body: JSON.stringify(cart)
     })
     .then(res => {
-        if(res.ok) {
-            console.log('POST exitoso');
-        } else {
-            console.log(`Algo salió mal. Código de error: ${res.status}`)
+        if(!res.ok) {
+            console.error('There was an error!', res.status);
         }
     })
     .catch(err => {
+        console.error('There was an error!', err);
         throw new Error(err);
     })
 }
 
 async function restoreDatabaseToDefault() {
     await deleteAllPurchases(URL_PURCHASES);
-    restoreProductsStock(URL_PRODUCTS);
+    await restoreProductsStock(URL_PRODUCTS);
 }
 
 const services = {
