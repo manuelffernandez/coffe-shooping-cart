@@ -158,7 +158,7 @@ function resetApp() {
 		})
 }
 
-function disableOrEnableAddBtn() {
+function disableOrEnableAddNewButton() {
 	cart.forEach(product => {
 		const {id, stock} = product;
 		let button = document.querySelector(`#addNew-btn-${id}`);
@@ -209,7 +209,7 @@ function refreshIndexDOM() {
 	if(cart.calcTotal()) {
 		ui.generateCart(cart);
 	}
-	disableOrEnableAddBtn();
+	disableOrEnableAddNewButton();
 	initEventListener(getAllListenedButtons());
 }
 
