@@ -1,5 +1,6 @@
 import { swalConfig } from "./swalConfig.js";
 import toastyStyles from "./toastyConfig.js";
+import purchaseContent from "./content.js";
 
 const toastyReference = {
 	red: toastyStyles.red,
