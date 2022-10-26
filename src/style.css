@@ -78,12 +78,12 @@
 	background-image: url(./assets/img/bg_img/coffe_beans.jpg);
 }
 
-.whiteFontHover {
+.font__white__hover {
 	color: var(--color-white);
 	transition: all 0.3s;
 }
 
-.whiteFontHover:hover {
+.font__white__hover:hover {
 	color: var(--color-green);
 }
 
@@ -119,4 +119,8 @@
 
 .cartList__img {
 	width: 10rem;
+}
+
+.link__active {
+	border-bottom: 2px solid var(--color-green);
 }
