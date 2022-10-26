@@ -37,17 +37,25 @@ async function updateDatabaseProductStock(store, cart) {
 }
 
 function postPurchase(cart) {
+    let cartToPost = {};
+    let purchaseDate = new Date();
+
+    cartToPost.products = {...cart};
+    cartToPost.date = `${purchaseDate.getDay()}-${purchaseDate.getMonth()}-${purchaseDate.getFullYear()}`;
+    cartToPost.orderId = Math.floor(Math.random() * 50000);
+
     return fetch(URL_PURCHASES, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json;charset=utf-8'
         },
-        body: JSON.stringify(cart)
+        body: JSON.stringify(cartToPost)
     })
     .then(res => {
         if(!res.ok) {
             console.error('There was an error!', res.status);
         }
+        return res.json();
     })
     .catch(err => {
         console.error('There was an error!', err);
