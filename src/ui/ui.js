@@ -177,6 +177,11 @@ function closeAlert() {
 	Swal.close();
 }
 
+function generatePurchaseHistoryTable(table, record) {
+    table.innerHTML = purchaseContent.generateTableStructure();
+    purchaseContent.generateAllTableRows(record)
+}
+
 const ui = {
 	generateShop,
 	generateCart,
@@ -187,7 +192,8 @@ const ui = {
 	closeAlert,
 	alertToastify,
 	changeButtonStyleToDisable,
-	changeButtonStyleToEnable
+	changeButtonStyleToEnable,
+	generatePurchaseHistoryTable
 };
 
 export default ui;
