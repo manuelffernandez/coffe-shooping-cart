@@ -7,6 +7,7 @@ export default function generatePurchaseObject(cart) {
     for(let product of auxiliarCart) {
         delete product.img;
         delete product.desc;
+        product.subtotal = product.stock * product.price;
     }
     purchase.amount = total;
     purchase.products = {...auxiliarCart};
