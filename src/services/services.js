@@ -5,11 +5,32 @@ const URL_PURCHASES = 'https://634613bf745bd0dbd3761fe4.mockapi.io/purchases';
 
 function getDatabaseProducts() {
 	return fetch(URL_PRODUCTS)
-    .then(response => response.json())
+    .then(res => {
+        if(!res.ok) {
+            console.error('There was an error!', res.status);
+            return
+        }
+        return res.json()
+    })
     .catch(err => {
         console.error('There was an error!', err);
         throw new Error(err);
     });
+}
+
+function getDatabasePurchaseHistory() {
+    return fetch(URL_PURCHASES)
+    .then(res => {
+        if(!res.ok) {
+            console.error('There was an error!', res.status);
+            return
+        }
+        return res.json()
+    })
+    .catch(err => {
+        console.error('There was an error!', err);
+        throw new Error(err);
+    })
 }
 
 async function updateDatabaseProductStock(store, cart) {
