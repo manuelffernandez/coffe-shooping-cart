@@ -11,6 +11,7 @@
 // =================================================
 import Item  from "./entities.js";
 import services from "./services/services.js"
+import { getAllListenedButtons, defineButtonFunction } from "./buttons.js";
 import { updateLocalStorageCart, getCartFromLocalStorage } from "./localStorage.js";
 import ui from "./ui/ui.js";
 
@@ -180,16 +181,9 @@ function disableOrEnableAddNewButton() {
 	});
 }
 
-function defineButtonFunction(button) {
-	const id = button.id;
-	const functionTag = id.substring(0, id.indexOf('-'))
-
-	return buttonsFunctionsList[functionTag]
-}
-
 function initEventListener(buttonsArray) {
 	for(let button of buttonsArray) {
-		const buttonFunction = defineButtonFunction(button);
+		const buttonFunction = defineButtonFunction(indexButtonsFunctionsList, button);
 
 		button.addEventListener('click', () => {
 			const id = button.id.charAt(button.id.length - 1)
@@ -199,11 +193,6 @@ function initEventListener(buttonsArray) {
 			refreshIndexDOM();
 		})
 	}
-}
-
-function getAllListenedButtons() {
-	let buttons = document.querySelectorAll('.listenedButton')
-	return [...buttons]
 }
 
 // ============== LOCALSTORAGE ============== //
