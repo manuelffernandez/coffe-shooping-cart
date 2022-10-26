@@ -178,7 +178,7 @@ function closeAlert() {
 }
 
 function generatePurchaseHistoryModals(modalElement, record) {
-	modalElement.innerHTML = htmlGenerator.generateAllPurchaseModals(record);
+	modalElement.appendChild(htmlGenerator.generateAllPurchaseModals(record));
 }
 
 function generatePurchaseHistoryTable(tableElement, record) {
