@@ -1,4 +1,5 @@
 import { deleteAllPurchases, restoreProductsStock } from './restoredb.js'
+import generatePurchaseObject from './generator.js';
 
 const URL_PRODUCTS = 'https://634613bf745bd0dbd3761fe4.mockapi.io/products';
 const URL_PURCHASES = 'https://634613bf745bd0dbd3761fe4.mockapi.io/purchases';
@@ -58,19 +59,14 @@ async function updateDatabaseProductStock(store, cart) {
 }
 
 function postPurchase(cart) {
-    let cartToPost = {};
-    let purchaseDate = new Date();
-
-    cartToPost.products = {...cart};
-    cartToPost.date = `${purchaseDate.getDay()}-${purchaseDate.getMonth()}-${purchaseDate.getFullYear()}`;
-    cartToPost.orderId = Math.floor(Math.random() * 50000);
+    const purchase = generatePurchaseObject(cart);
 
     return fetch(URL_PURCHASES, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json;charset=utf-8'
         },
-        body: JSON.stringify(cartToPost)
+        body: JSON.stringify(purchase)
     })
     .then(res => {
         if(!res.ok) {
