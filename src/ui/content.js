@@ -4,9 +4,9 @@
 function generatePurchaseModal(purchase) {
     let modal = document.createElement('div');
     modal.classList.add('modal', 'fade');
-    modal.id = 'exampleModal';
-    modal.tabIndex = '-1'
-    modal.setAttribute('aria-labelledby', 'exampleModalLabel')
+    modal.tabIndex = '-1';
+    modal.id = `modal-${purchase.id}`;
+    modal.setAttribute('aria-labelledby', `modalLabel-${purchase.id}`)
     modal.setAttribute('aria-hidden', 'true')
 
     modal.innerHTML = `<div class="modal-dialog">
@@ -40,7 +40,7 @@ function generateTableStructure() {
     let table = `<thead>
                     <tr>
                         <th scope="col">Fecha</th>
-                        <th scope="col">ID de la orden</th>
+                        <th scope="col">Número de compra</th>
                         <th scope="col">Monto total</th>
                         <th scope="col">Ver más</th>
                     </tr>
@@ -57,7 +57,7 @@ function generateTableRow(purchase) {
                     <td>${purchase.orderId}</td>
                     <td>$${purchase.amount}</td>
                     <td>
-                        <button id="" class="bg-transparent border-0 text-info link" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver detalle</button>
+                        <button id="" class="bg-transparent border-0 text-info link" data-bs-toggle="modal" data-bs-target="#modal-${purchase.id}">Ver detalle</button>
                     </td>`
     return row
 }
