@@ -9,7 +9,7 @@ function getDatabaseProducts() {
     .then(res => {
         if(!res.ok) {
             console.error('There was an error!', res.status);
-            return
+            return res
         }
         return res.json()
     })
@@ -24,7 +24,7 @@ function getDatabasePurchaseHistory() {
     .then(res => {
         if(!res.ok) {
             console.error('There was an error!', res.status);
-            return
+            return res
         }
         return res.json()
     })
