@@ -1,6 +1,6 @@
 import { swalConfig } from "./swalConfig.js";
 import toastyStyles from "./toastyConfig.js";
-import purchaseContent from "./content.js";
+import htmlGenerator from "./content.js";
 
 const toastyReference = {
 	red: toastyStyles.red,
@@ -177,9 +177,13 @@ function closeAlert() {
 	Swal.close();
 }
 
-function generatePurchaseHistoryTable(table, record) {
-    table.innerHTML = purchaseContent.generateTableStructure();
-    purchaseContent.generateAllTableRows(record)
+function generatePurchaseHistoryModals(modalElement, record) {
+	modalElement.innerHTML = htmlGenerator.generateAllPurchaseModals(record);
+}
+
+function generatePurchaseHistoryTable(tableElement, record) {
+    tableElement.innerHTML = htmlGenerator.generateTableStructure();
+    htmlGenerator.generateAllTableRows(record)
 }
 
 const ui = {
@@ -193,7 +197,8 @@ const ui = {
 	alertToastify,
 	changeButtonStyleToDisable,
 	changeButtonStyleToEnable,
-	generatePurchaseHistoryTable
+	generatePurchaseHistoryTable,
+	generatePurchaseHistoryModals
 };
 
 export default ui;
