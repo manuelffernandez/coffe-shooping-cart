@@ -3,6 +3,8 @@ import ui from "./ui/ui.js";
 
 let record;
 const table = document.querySelector('#purchase-table');
+const modals = document.querySelector('#modal-container');
+console.log(modals);
 const purchButtonsFunctionsList = {
 
 }
@@ -15,6 +17,7 @@ async function initHistory() {
     if(!record.length) {
     } else {
         ui.generatePurchaseHistoryTable(table, record);
+        ui.generatePurchaseHistoryModals(modals, record)
     }
 }
 
