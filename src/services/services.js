@@ -87,6 +87,7 @@ async function restoreDatabaseToDefault() {
 
 const services = {
     getDatabaseProducts,
+    getDatabasePurchaseHistory,
     updateDatabaseProductStock,
     postPurchase,
     restoreDatabaseToDefault
