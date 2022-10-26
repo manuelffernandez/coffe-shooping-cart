@@ -81,7 +81,7 @@ let databaseStore = [];
 let store = new Storage();
 let cart = new Storage();
 
-let buttonsFunctionsList = {
+let indexButtonsFunctionsList = {
 		addNew: addNewUnitToCart,
 		add: addUnitToCart,
 		remove: removeUnitFromCart,
