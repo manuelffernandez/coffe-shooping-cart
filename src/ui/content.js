@@ -8,8 +8,6 @@ function generatePurchaseModal(purchase) {
     modal.tabIndex = '-1'
     modal.setAttribute('aria-labelledby', 'exampleModalLabel')
     modal.setAttribute('aria-hidden', 'true')
-    // modal.ariaLabel = 'exampleModalLabel'
-    // modal.ariaHidden = 'true';
 
     modal.innerHTML = `<div class="modal-dialog">
         <div class="modal-content">
@@ -32,12 +30,11 @@ function generatePurchaseModal(purchase) {
 }
 
 function generateAllPurchaseModals(record) {
-    let allModals = document.createElement('div');
+    let allModals = document.createElement('div')
 
     for(let purchase of record) {
-        allModals.appendChild(generatePurchaseModal(purchase))
+        allModals.appendChild(generatePurchaseModal(purchase));
     }
-
     return allModals
 }
 
