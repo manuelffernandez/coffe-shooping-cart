@@ -39,7 +39,7 @@ const completedPurchase = {
 const loading = {
     customClass: styleConfig,
     title: 'Cargando',
-    html: '<img src="./src/assets/svg/loadingSpin.svg" />',
+    html: '<div class="spinCont"></div>',
     showConfirmButton: false,
     confirmButtonText: '',
     showCancelButton: false,

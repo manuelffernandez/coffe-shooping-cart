@@ -1,15 +1,37 @@
 import { deleteAllPurchases, restoreProductsStock } from './restoredb.js'
+import generatePurchaseObject from './generator.js';
 
 const URL_PRODUCTS = 'https://634613bf745bd0dbd3761fe4.mockapi.io/products';
 const URL_PURCHASES = 'https://634613bf745bd0dbd3761fe4.mockapi.io/purchases';
 
 function getDatabaseProducts() {
 	return fetch(URL_PRODUCTS)
-    .then(response => response.json())
+    .then(res => {
+        if(!res.ok) {
+            console.error('There was an error!', res.status);
+            return res
+        }
+        return res.json()
+    })
     .catch(err => {
         console.error('There was an error!', err);
         throw new Error(err);
     });
+}
+
+function getDatabasePurchaseHistory() {
+    return fetch(URL_PURCHASES)
+    .then(res => {
+        if(!res.ok) {
+            console.error('There was an error!', res.status);
+            return res
+        }
+        return res.json()
+    })
+    .catch(err => {
+        console.error('There was an error!', err);
+        throw new Error(err);
+    })
 }
 
 async function updateDatabaseProductStock(store, cart) {
@@ -37,17 +59,20 @@ async function updateDatabaseProductStock(store, cart) {
 }
 
 function postPurchase(cart) {
+    const purchase = generatePurchaseObject(cart);
+
     return fetch(URL_PURCHASES, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json;charset=utf-8'
         },
-        body: JSON.stringify(cart)
+        body: JSON.stringify(purchase)
     })
     .then(res => {
         if(!res.ok) {
             console.error('There was an error!', res.status);
         }
+        return res.json();
     })
     .catch(err => {
         console.error('There was an error!', err);
@@ -62,6 +87,7 @@ async function restoreDatabaseToDefault() {
 
 const services = {
     getDatabaseProducts,
+    getDatabasePurchaseHistory,
     updateDatabaseProductStock,
     postPurchase,
     restoreDatabaseToDefault
