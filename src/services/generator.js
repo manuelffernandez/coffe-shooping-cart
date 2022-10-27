@@ -10,7 +10,7 @@ export default function generatePurchaseObject(cart) {
         product.subtotal = product.stock * product.price;
     }
     purchase.amount = total;
-    purchase.products = {...auxiliarCart};
+    purchase.products = [...auxiliarCart];
     purchase.date = `${purchaseDate.getDay()}-${purchaseDate.getMonth()}-${purchaseDate.getFullYear()}`;
     purchase.orderId = Math.floor(Math.random() * 50000);
 
