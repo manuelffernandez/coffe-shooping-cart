@@ -1,6 +1,23 @@
 // ======================================================
 // ==================== purchHistory ====================
 // ======================================================
+function generateTableBody(products){
+    let tableBody = '';
+    console.log(products);
+    console.log(products['0']);
+
+    for(let item of products) {
+        let tableBodyRow = `<tr>
+            <td>${item.stock}</td>
+            <td>${item.name}</td>
+            <td>$${item.price}</td>
+            <td>$${item.subtotal}</td>
+        </tr>`
+        tableBody += tableBodyRow;
+    }
+    return tableBody
+}
+
 function generatePurchaseModal(purchase) {
     let modal = document.createElement('div');
     modal.classList.add('modal', 'fade');
@@ -16,7 +33,27 @@ function generatePurchaseModal(purchase) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                ...
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Producto</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${generateTableBody(purchase.products)}
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-active">
+                                <th scope="row">Total</th>
+                                <td></td>
+                                <td></td>
+                                <td>$${purchase.amount}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="rounded px-3 py-1 fs-5 enabled__addButton karla" data-bs-dismiss="modal">Close</button>
