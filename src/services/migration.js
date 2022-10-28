@@ -2,10 +2,10 @@
 // This code was executed just once with the purpouse of migrate the items
 // json file to the corresponding resource in mockapi. Namely its not called
 // in any part of the main.js execution.
-// Its maked on the front side because the plataform doesn't have tools to set 
+// Its maked on the front side because the plataform doesn't have tools to set
 // specific porperty values. It only offers you to generate them via faker.js
 // library.
-// This way of migration allows to set the imgs paths stored inside the repo 
+// This way of migration allows to set the imgs paths stored inside the repo
 // and data who complements the site thematic.
 // For this reason node-fetch was installed as devDependencies
 

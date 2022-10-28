@@ -1,5 +1,5 @@
-// This funct allows to set a proper and useful object structure to post it on the 
-// database "purchase" resource.
+// This funct allows to set a proper and useful object structure to post it on the
+// database "purchase" resource when a buy is concretized.
 
 export default function generatePurchaseObject(cart) {
     const total = cart.calcTotal();
