@@ -1,9 +1,15 @@
-// Archivo de migración de datos para la API de mockapi.io
-// Este codigo fue ejecutado una sola vez con el objetivo de migrar los items
-// al recurso correspondiente en mockapi.
-// Esto se hizo desde el lado del front porque las herramientas que ofrece la plataforma
-// no sirven para generar valores especificos a las propiedades
-// Para más información sobre esta API visite https://mockapi.io
+// Migration data file to the API of mockapi.io
+// This code was executed just once with the purpouse of migrate the items
+// json file to the corresponding resource in mockapi. Namely its not called
+// in any part of the main.js execution.
+// Its maked on the front side because the plataform doesn't have tools to set 
+// specific porperty values. It only offers you to generate them via faker.js
+// library.
+// This way of migration allows to set the imgs paths stored inside the repo 
+// and data who complements the site thematic.
+// For this reason node-fetch was installed as devDependencies
+
+// For more information visit https://mockapi.io
 
 import fetch from "node-fetch";
 
