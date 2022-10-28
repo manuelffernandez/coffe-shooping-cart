@@ -1,3 +1,10 @@
+// Archivo de migración de datos para la API de mockapi.io
+// Este codigo fue ejecutado una sola vez con el objetivo de migrar los items
+// al recurso correspondiente en mockapi.
+// Esto se hizo desde el lado del front porque las herramientas que ofrece la plataforma
+// no sirven para generar valores especificos a las propiedades
+// Para más información sobre esta API visite https://mockapi.io
+
 import fetch from "node-fetch";
 
 class Item {
