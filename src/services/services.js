@@ -1,5 +1,5 @@
 import { deleteAllPurchases, restoreProductsStock } from './restoredb.js'
-import generatePurchaseObject from './generator.js';
+import generatePurchaseObject from './postObj.js';
 
 const URL_PRODUCTS = 'https://634613bf745bd0dbd3761fe4.mockapi.io/products';
 const URL_PURCHASES = 'https://634613bf745bd0dbd3761fe4.mockapi.io/purchases';

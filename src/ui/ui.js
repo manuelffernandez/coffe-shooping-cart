@@ -1,6 +1,6 @@
 import { swalConfig } from "./swalConfig.js";
 import toastyStyles from "./toastyConfig.js";
-import htmlGenerator from "./content.js";
+import htmlGenerator from "./genHTML.js";
 
 const toastyReference = {
 	red: toastyStyles.red,
