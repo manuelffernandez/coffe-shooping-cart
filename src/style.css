@@ -52,6 +52,18 @@
 	color: var(--color-green);
 }
 
+.header {
+	min-height: 60px;
+}
+
+.main {
+	min-height: calc(100vh - 124px);
+}
+
+.footer {
+	min-height: 60px;
+}
+
 .logo {
 	height: 3rem; /* 60/16 */
 }
