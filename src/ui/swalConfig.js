@@ -43,7 +43,8 @@ const loading = {
     showConfirmButton: false,
     confirmButtonText: '',
     showCancelButton: false,
-    cancelButtonText: ''
+    cancelButtonText: '',
+    allowOutsideClick: false
 };
 
 const confirmReset = {
