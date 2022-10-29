@@ -1,5 +1,5 @@
-import services from "./services/services.js";
-import ui from "./ui/ui.js";
+import services from "../services/services.js";
+import ui from "../ui/ui.js";
 
 let record;
 const modals = document.querySelector('#modal-container');
