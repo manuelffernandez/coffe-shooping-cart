@@ -3,9 +3,7 @@
 // ======================================================
 function generateTableBody(products){
     let tableBody = '';
-    console.log(products);
-    console.log(products['0']);
-
+    
     for(let item of products) {
         let tableBodyRow = `<tr>
             <td>${item.stock}</td>
