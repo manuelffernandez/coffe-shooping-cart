@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,31 +13,51 @@
 	<link rel="stylesheet" type="text/css" href="./src/style.css">
 
 	<!-- SCRIPTS -->
-		<!-- swal -->
+		<!-- swal2 -->
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 		<!-- toastify -->
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 		<!-- mainJS -->
-	<script type="text/javascript" src="./src/main.js" defer></script>
+	<script type="module" src="./src/main.js" defer></script>
 
 	<!-- font-awesome -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
 	<!-- FAVICON -->
-	<link rel="shortcut icon" href="public/favicon.ico">
-	<title>Orden de compra</title>
+	<link rel="shortcut icon" href="./public/favicon.ico">
+	<title>CoffeeStore</title>
 </head>
 <body>
-	<header>
-		<nav class="navbar navbar-expand-lg bg-dark paytoneone text-white">
+	<header class="header">
+		<nav class="navbar navbar-expand-sm bg-dark paytoneone text-white">
 			<div class="container-fluid">
-				<a class="navbar-brand" href="#">
-					<img src="./src/assets/img/icons/logo.png" class="logo" alt="logo">
-				</a>
+                <div class="container">
+					<a class="navbar-brand me-1" href="#">
+                        <img src="../src/assets/img/icons/logo.png" class="logo" alt="coffee logo">
+                    </a>
+				</div>
+                <div class="container">
+					<ul class="navbar-nav container-fluid justify-content-between mb-2 mb-lg-0">
+						<li class="nav-item link__active">
+							<a class="m-0 nav-link text-uppercase karla font__white__hover" aria-current="page" href="">Inicio</a>
+						</li>
+						<li class="nav-item">
+							<a class="m-0 nav-link text-uppercase karla font__white__hover" href="./public/purchHistory.html">Historial</a>
+						</li>
+					</ul>
+				</div>
+				<div class="container d-flex justify-content-end">
+					<button id="reset-nav-btn" class="me-4 rounded text-align-center text_uppercase enabled__addButton listenedButton">
+						Restore
+					</button>
+					<button id="confirm-nav-btn" class="me-1 bg-transparent border-0 listenedButton">
+						<i class="fa-sharp fa-solid fa-cart-shopping fs-3 font__white__hover"></i>
+					</button>
+				</div>
 			</div>
 		</nav>
 	</header>
-	<main>
+	<main class="main">
 		<section>
 			<div class="container-fluid p-0">
 				<div class="bgCont">
@@ -65,6 +85,17 @@
 			</div>
 		</section>
 	</main>
+	<footer class="container-fluid d-flex bg-dark footer">
+		<div class="col-6 py-3 text-start font__white karla">© Coffee Store - Manuel Fernández 2022</div>
+		<div class="col-6 d-flex align-items-center justify-content-end">
+			<p class="m-0 d-inline-block font__white karla">
+				Link to the repo
+				<a href="https://github.com/manuelffernandez/coffe-shopping-cart" target="_blank" class="d-inline-block">
+					<i class="fa-brands fa-github fs-3 font__white__hover"></i>
+				</a>
+			</p>
+		</div>
+	</footer>
 
 
 	<!-- Bootstrap js & Popper -->

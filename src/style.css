@@ -1,15 +1,31 @@
-
-
-
 /*'Paytone One'*/
 @import url('https://fonts.googleapis.com/css2?family=Paytone+One&display=swap');
 /*'Karla'*/
 @import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400&display=swap');
 
+/* !important were added to override bootstrap/swal2 styles */
+
 :root {
   --color-white: #f2f2da;
   --color-green: #63c979;
   --color-grey: #d5d5d5;
+  --color-red: #ca2c2c;
+}
+
+.bgc__white {
+	background-color: var(--color-white) !important;
+}
+
+.bgc__green {
+	background-color: var(--color-green) !important;
+}
+
+.bgc__grey {
+	background-color: var(--color-grey) !important;
+}
+
+.bgc__red {
+	background-color: var(--color-red) !important;
 }
 
 .paytoneone {
@@ -36,8 +52,27 @@
 	color: var(--color-green);
 }
 
+.header {
+	min-height: 60px;
+}
+
+.main {
+	min-height: calc(100vh - 124px);
+}
+
+.footer {
+	min-height: 60px;
+}
+
 .logo {
 	height: 3rem; /* 60/16 */
+}
+
+.spinCont {
+    height: 100px;
+    background-repeat: no-repeat;
+    background-image: url('./assets/svg/loadingSpin.svg');
+	background-position: center;
 }
 
 .bgCont {
@@ -59,14 +94,22 @@
 	background-image: url(./assets/img/bg_img/coffe_beans.jpg);
 }
 
+.font__white__hover {
+	color: var(--color-white);
+	transition: all 0.3s;
+}
+
+.font__white__hover:hover {
+	color: var(--color-green);
+}
+
 .deleteButton {
 	border-style: none;
 	transition: all 0.3s;
 }
 
-/* important to override BS styles */
 .deleteButton:hover {
-	background-color: red !important;
+	background-color: var(--color-red) !important;
 	color: white !important;
 }
 
@@ -87,8 +130,13 @@
 	border-style: none;
 	background-color: var(--color-white);
 	color: var(--color-grey);
+	cursor: default;
 }
 
 .cartList__img {
 	width: 10rem;
+}
+
+.link__active {
+	border-bottom: 2px solid var(--color-green);
 }
